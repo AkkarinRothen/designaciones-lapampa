@@ -288,9 +288,10 @@ async function sendTelegramNotification(botToken, chatId, vacantes) {
 // Si se ejecuta directamente desde línea de comandos
 if (require.main === module) {
   (async () => {
-    console.log('🚀 Iniciando escaneo de designaciones en Zona Centro...');
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
+    const isForce = process.argv.includes('--force') || process.argv.includes('-f');
+    const args = process.argv.slice(2).filter(a => !a.startsWith('-'));
+    const botToken = args[0] || process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = args[1] || process.env.TELEGRAM_CHAT_ID;
 
     const vacantes = await scrapeAll();
     const filtradas = vacantes.filter(v => v.matchedCategory !== null);
@@ -311,13 +312,13 @@ if (require.main === module) {
     // Manejo de caché para evitar notificaciones repetidas
     const cacheFile = path.join(dataDir, 'seen_ids.json');
     let seenIds = [];
-    if (fs.existsSync(cacheFile)) {
+    if (fs.existsSync(cacheFile) && !isForce) {
       try {
         seenIds = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
       } catch (e) {}
     }
 
-    const nuevasParaAvisar = filtradas.filter(v => !seenIds.includes(v.id));
+    const nuevasParaAvisar = isForce ? filtradas : filtradas.filter(v => !seenIds.includes(v.id));
 
     if (nuevasParaAvisar.length > 0) {
       console.log(`📢 ¡Se encontraron ${nuevasParaAvisar.length} nuevas vacantes para notificar!`);

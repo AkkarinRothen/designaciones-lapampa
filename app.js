@@ -597,6 +597,93 @@ Tu bot de Telegram está configurado correctamente para avisarte cada vez que sa
       btnTest.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Probar conexión';
     }
   });
+
+  // Enviar vacantes vigentes ahora
+  const btnSendCurrent = document.getElementById('btnSendCurrentVacancies');
+  if (btnSendCurrent) {
+    btnSendCurrent.addEventListener('click', async () => {
+      const botToken = tokenInput.value.trim();
+      const chatId = chatInput.value.trim();
+
+      if (!botToken || !chatId) {
+        statusMsg.className = 'status-msg error';
+        statusMsg.textContent = 'Por favor ingresa primero tu Bot Token y tu Chat ID.';
+        statusMsg.classList.remove('hidden');
+        return;
+      }
+
+      // Vacantes de interés (Inglés y Lengua)
+      const vacantesToSend = state.vacantes.filter(v => v.matchedCategory !== null);
+      if (vacantesToSend.length === 0) {
+        statusMsg.className = 'status-msg error';
+        statusMsg.textContent = 'No hay vacantes vigentes de Inglés o Lengua en este momento para enviar.';
+        statusMsg.classList.remove('hidden');
+        return;
+      }
+
+      btnSendCurrent.disabled = true;
+      btnSendCurrent.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando vacantes...';
+
+      try {
+        let sentCount = 0;
+        for (const v of vacantesToSend) {
+          const turnoMap = { 'M': 'Mañana', 'T': 'Tarde', 'V': 'Vespertino', 'N': 'Noche' };
+          const turnoLabel = turnoMap[(v.turno || '').toUpperCase()] || v.turno;
+          const isPropuesta = v.sheetType === 'Propuestas';
+          const tipoHeader = isPropuesta ? '⚡ *¡PROPUESTA EN SECUNDARIA (Vigente)!*' : '🔔 *¡Designación Activa (Interinatos y Suplencias)!*';
+          const tipoBadge = isPropuesta ? '🏷️ *PROPUESTA*' : '📋 *INTERINATOS Y SUPLENCIAS*';
+
+          const text = `${tipoHeader}
+
+📌 *Convocatoria:* ${tipoBadge}
+📍 *Localidad:* ${v.localidad} (${v.sede})
+🏫 *Colegio:* ${v.colegio}
+📚 *Materia:* *${v.materia}*
+⏱️ *Horas:* *${v.horas} hs* | *Curso:* ${v.curso} "${v.division}" | *Turno:* ${turnoLabel}
+📋 *Carácter:* ${v.revista} | *Motivo:* ${v.motivo}
+📅 *Fecha:* ${v.fechaDesignacion}
+⏰ *Horarios:* ${v.horarios}
+
+🔗 [Abrir en Voz por Vos](https://vozporvos.lapampa.edu.ar/)
+📑 [Ver Hoja de Cálculo Oficial](${v.linkSheet})`;
+
+          const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text,
+              parse_mode: 'Markdown',
+              disable_web_page_preview: true
+            })
+          });
+
+          if (tgRes.ok) {
+            sentCount++;
+          } else {
+            const errData = await tgRes.json();
+            throw new Error(errData.description || 'Error al enviar a Telegram');
+          }
+
+          // Breve pausa para no saturar rate limit
+          await new Promise(r => setTimeout(r, 400));
+        }
+
+        statusMsg.className = 'status-msg success';
+        statusMsg.textContent = `¡Listo! Se enviaron las ${sentCount} vacantes vigentes con éxito a tu Telegram.`;
+        statusMsg.classList.remove('hidden');
+        playNotificationChime();
+        showToast(`Se enviaron ${sentCount} vacantes a Telegram`, 'success');
+      } catch (e) {
+        statusMsg.className = 'status-msg error';
+        statusMsg.textContent = `Error al enviar vacantes: ${e.message}`;
+        statusMsg.classList.remove('hidden');
+      } finally {
+        btnSendCurrent.disabled = false;
+        btnSendCurrent.innerHTML = '<i class="fa-solid fa-bolt"></i> Enviar vacantes vigentes ahora';
+      }
+    });
+  }
 }
 
 // ==========================================================================

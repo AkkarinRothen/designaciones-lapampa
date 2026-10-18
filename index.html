@@ -70,168 +70,310 @@
 
     <!-- Main Container -->
     <main class="main-container container">
-      <!-- Quick Stats / Highlights -->
-      <section class="stats-grid">
-        <div class="stat-card" data-filter="all">
-          <div class="stat-icon icon-blue"><i class="fa-solid fa-layer-group"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statTotal">0</span>
-            <span class="stat-label">Total Vacantes</span>
-          </div>
-        </div>
+      <!-- Navigation Tabs (Secundaria vs RedPam) -->
+      <nav class="app-nav-tabs" aria-label="Secciones">
+        <button id="tabDesignaciones" class="nav-tab active" type="button">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Designaciones Secundarias</span>
+          <span class="tab-badge" id="badgeDesignacionesCount">0</span>
+        </button>
+        <button id="tabRedpam" class="nav-tab" type="button">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Cursos RedPam</span>
+          <span class="tab-badge tab-badge-accent" id="badgeRedpamCount">24</span>
+        </button>
+      </nav>
 
-        <div class="stat-card stat-card-active" data-filter="ingles">
-          <div class="stat-icon icon-purple"><i class="fa-solid fa-language"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statIngles">0</span>
-            <span class="stat-label">Inglés</span>
-          </div>
-          <span class="stat-badge">Prioritario</span>
-        </div>
-
-        <div class="stat-card stat-card-active" data-filter="lengua">
-          <div class="stat-icon icon-emerald"><i class="fa-solid fa-book-open"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statLengua">0</span>
-            <span class="stat-label">Lengua y Literatura</span>
-          </div>
-          <span class="stat-badge">Prioritario</span>
-        </div>
-
-        <div class="stat-card" data-filter="propuestas">
-          <div class="stat-icon icon-rose"><i class="fa-solid fa-bolt"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statPropuestas">0</span>
-            <span class="stat-label">Propuestas</span>
-          </div>
-          <span class="stat-badge stat-badge-rose">Convocatoria</span>
-        </div>
-
-        <div class="stat-card" data-filter="otras">
-          <div class="stat-icon icon-amber"><i class="fa-solid fa-chalkboard-user"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statOtras">0</span>
-            <span class="stat-label">Otras Materias</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Filter Controls Bar -->
-      <section class="controls-card">
-        <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="searchInput" placeholder="Buscar por colegio, materia, curso, cupof..." autocomplete="off">
-          <button id="btnClearSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
-        <div class="filter-pills-row">
-          <div class="filter-group">
-            <span class="filter-label"><i class="fa-solid fa-filter"></i> Materia:</span>
-            <div class="pills-container" id="subjectPills">
-              <button class="pill-btn active" data-subject="priority">Inglés y Lengua</button>
-              <button class="pill-btn" data-subject="ingles">Solo Inglés</button>
-              <button class="pill-btn" data-subject="lengua">Solo Lengua</button>
-              <button class="pill-btn" data-subject="all">Todas las materias</button>
+      <!-- ================================================================= -->
+      <!-- SECCIÓN 1: DESIGNACIONES SECUNDARIAS                              -->
+      <!-- ================================================================= -->
+      <div id="sectionDesignaciones" class="tab-view active">
+        <!-- Quick Stats / Highlights -->
+        <section class="stats-grid">
+          <div class="stat-card" data-filter="all">
+            <div class="stat-icon icon-blue"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statTotal">0</span>
+              <span class="stat-label">Total Vacantes</span>
             </div>
           </div>
 
-          <div class="filter-group">
-            <span class="filter-label"><i class="fa-solid fa-bolt"></i> Convocatoria:</span>
-            <select id="sheetTypeSelect" class="form-select form-select-sm">
-              <option value="all">Todas (Propuestas + Interinatos)</option>
-              <option value="Propuestas">⚡ Solo Propuestas</option>
-              <option value="Interinatos y Suplencias">📋 Solo Interinatos y Suplencias</option>
-            </select>
+          <div class="stat-card stat-card-active" data-filter="ingles">
+            <div class="stat-icon icon-purple"><i class="fa-solid fa-language"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statIngles">0</span>
+              <span class="stat-label">Inglés</span>
+            </div>
+            <span class="stat-badge">Prioritario</span>
           </div>
 
-          <div class="filter-group">
-            <span class="filter-label"><i class="fa-solid fa-clock"></i> Horas:</span>
-            <select id="hoursSelect" class="form-select form-select-sm">
-              <option value="all">Todas las horas</option>
-              <option value="le3">Hasta 3 hs (≤ 3)</option>
-              <option value="4to6">De 4 a 6 hs</option>
-              <option value="gt6">Más de 6 hs (> 6)</option>
-              <option value="eq2">2 hs exactas</option>
-              <option value="eq3">3 hs exactas</option>
-              <option value="eq4">4 hs exactas</option>
-              <option value="eq5">5 hs exactas</option>
-            </select>
+          <div class="stat-card stat-card-active" data-filter="lengua">
+            <div class="stat-icon icon-emerald"><i class="fa-solid fa-book-open"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statLengua">0</span>
+              <span class="stat-label">Lengua y Literatura</span>
+            </div>
+            <span class="stat-badge">Prioritario</span>
           </div>
 
-          <div class="filter-group">
-            <span class="filter-label"><i class="fa-solid fa-location-dot"></i> Localidad:</span>
-            <select id="localitySelect" class="form-select">
-              <option value="all">Todas las localidades de Zona Centro</option>
-              <optgroup label="Sede Santa Rosa">
-                <option value="Santa Rosa">Santa Rosa</option>
-                <option value="Toay">Toay</option>
-                <option value="Catriló">Catriló</option>
-                <option value="Anguil">Anguil</option>
-                <option value="Ataliva Roca">Ataliva Roca</option>
-                <option value="Uriburu">Uriburu</option>
-                <option value="Lonquimay">Lonquimay</option>
-              </optgroup>
-              <optgroup label="Otras Sedes de Zona Centro" id="otherSedesGroup">
-                <!-- Se llena dinámicamente -->
-              </optgroup>
-            </select>
+          <div class="stat-card" data-filter="propuestas">
+            <div class="stat-icon icon-rose"><i class="fa-solid fa-bolt"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statPropuestas">0</span>
+              <span class="stat-label">Propuestas</span>
+            </div>
+            <span class="stat-badge stat-badge-rose">Convocatoria</span>
           </div>
 
-          <div class="filter-group">
-            <span class="filter-label"><i class="fa-solid fa-calendar-day"></i> Turno:</span>
-            <select id="shiftSelect" class="form-select form-select-sm">
-              <option value="all">Todos los turnos</option>
-              <option value="M">Mañana</option>
-              <option value="T">Tarde</option>
-              <option value="V">Vespertino</option>
-              <option value="N">Noche</option>
-            </select>
+          <div class="stat-card" data-filter="otras">
+            <div class="stat-icon icon-amber"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statOtras">0</span>
+              <span class="stat-label">Otras Materias</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filter Controls Bar -->
+        <section class="controls-card">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Buscar por colegio, materia, curso, cupof..." autocomplete="off">
+            <button id="btnClearSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
           </div>
 
-          <button id="btnManageKeywords" class="btn btn-outline btn-sm" title="Editar palabras clave">
-            <i class="fa-solid fa-tags"></i> Palabras Clave
-          </button>
+          <div class="filter-pills-row">
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-filter"></i> Materia:</span>
+              <div class="pills-container" id="subjectPills">
+                <button class="pill-btn active" data-subject="priority">Inglés y Lengua</button>
+                <button class="pill-btn" data-subject="ingles">Solo Inglés</button>
+                <button class="pill-btn" data-subject="lengua">Solo Lengua</button>
+                <button class="pill-btn" data-subject="all">Todas las materias</button>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-bolt"></i> Convocatoria:</span>
+              <select id="sheetTypeSelect" class="form-select form-select-sm">
+                <option value="all">Todas (Propuestas + Interinatos)</option>
+                <option value="Propuestas">⚡ Solo Propuestas</option>
+                <option value="Interinatos y Suplencias">📋 Solo Interinatos y Suplencias</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-clock"></i> Horas:</span>
+              <select id="hoursSelect" class="form-select form-select-sm">
+                <option value="all">Todas las horas</option>
+                <option value="le3">Hasta 3 hs (≤ 3)</option>
+                <option value="4to6">De 4 a 6 hs</option>
+                <option value="gt6">Más de 6 hs (> 6)</option>
+                <option value="eq2">2 hs exactas</option>
+                <option value="eq3">3 hs exactas</option>
+                <option value="eq4">4 hs exactas</option>
+                <option value="eq5">5 hs exactas</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-location-dot"></i> Localidad:</span>
+              <select id="localitySelect" class="form-select">
+                <option value="all">Todas las localidades de Zona Centro</option>
+                <optgroup label="Sede Santa Rosa">
+                  <option value="Santa Rosa">Santa Rosa</option>
+                  <option value="Toay">Toay</option>
+                  <option value="Catriló">Catriló</option>
+                  <option value="Anguil">Anguil</option>
+                  <option value="Ataliva Roca">Ataliva Roca</option>
+                  <option value="Uriburu">Uriburu</option>
+                  <option value="Lonquimay">Lonquimay</option>
+                </optgroup>
+                <optgroup label="Otras Sedes de Zona Centro" id="otherSedesGroup">
+                  <!-- Se llena dinámicamente -->
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-calendar-day"></i> Turno:</span>
+              <select id="shiftSelect" class="form-select form-select-sm">
+                <option value="all">Todos los turnos</option>
+                <option value="M">Mañana</option>
+                <option value="T">Tarde</option>
+                <option value="V">Vespertino</option>
+                <option value="N">Noche</option>
+              </select>
+            </div>
+
+            <button id="btnManageKeywords" class="btn btn-outline btn-sm" title="Editar palabras clave">
+              <i class="fa-solid fa-tags"></i> Palabras Clave
+            </button>
+          </div>
+        </section>
+
+        <!-- Alert Banner when new vacancies are discovered -->
+        <div id="newVacanciesAlert" class="alert-banner hidden">
+          <div class="alert-banner-content">
+            <i class="fa-solid fa-bell alert-icon"></i>
+            <div>
+              <strong>¡Nuevas designaciones encontradas!</strong>
+              <span id="alertBannerText">Se detectaron vacantes para tus materias de interés.</span>
+            </div>
+          </div>
+          <button id="btnDismissAlert" class="btn-alert-close"><i class="fa-solid fa-xmark"></i></button>
         </div>
-      </section>
 
-      <!-- Alert Banner when new vacancies are discovered -->
-      <div id="newVacanciesAlert" class="alert-banner hidden">
-        <div class="alert-banner-content">
-          <i class="fa-solid fa-bell alert-icon"></i>
-          <div>
-            <strong>¡Nuevas designaciones encontradas!</strong>
-            <span id="alertBannerText">Se detectaron vacantes para tus materias de interés.</span>
+        <!-- Vacancies Section Header -->
+        <section class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title" id="resultsTitle">Vacantes de Inglés y Lengua</h2>
+            <span class="results-badge" id="resultsCount">0 encontradas</span>
           </div>
+          <div class="section-meta">
+            <span class="text-muted" id="lastUpdatedLabel"><i class="fa-regular fa-clock"></i> Última sincronización: cargando...</span>
+          </div>
+        </section>
+
+        <!-- Vacancies Grid List -->
+        <section id="vacanciesGrid" class="vacancies-grid">
+          <!-- Rendered by app.js -->
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Conectando con las planillas oficiales del Ministerio de Educación...</p>
+          </div>
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
+          <h3>No se encontraron vacantes con los filtros seleccionados</h3>
+          <p>Prueba seleccionando "Todas las materias" o cambiando la localidad para ver publicaciones recientes.</p>
+          <button id="btnResetFilters" class="btn btn-secondary">Restablecer filtros</button>
         </div>
-        <button id="btnDismissAlert" class="btn-alert-close"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Vacancies Section Header -->
-      <section class="section-header">
-        <div class="section-title-wrap">
-          <h2 class="section-title" id="resultsTitle">Vacantes de Inglés y Lengua</h2>
-          <span class="results-badge" id="resultsCount">0 encontradas</span>
-        </div>
-        <div class="section-meta">
-          <span class="text-muted" id="lastUpdatedLabel"><i class="fa-regular fa-clock"></i> Última sincronización: cargando...</span>
-        </div>
-      </section>
+      <!-- ================================================================= -->
+      <!-- SECCIÓN 2: CURSOS Y CAPACITACIONES REDPAM                         -->
+      <!-- ================================================================= -->
+      <div id="sectionRedpam" class="tab-view hidden">
+        <!-- RedPam Stats -->
+        <section class="stats-grid stats-grid-redpam">
+          <div class="stat-card stat-card-active" data-redpam-stat="all">
+            <div class="stat-icon icon-blue"><i class="fa-solid fa-book-open-reader"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statRedpamTotal">0</span>
+              <span class="stat-label">Total Propuestas</span>
+            </div>
+          </div>
 
-      <!-- Vacancies Grid List -->
-      <section id="vacanciesGrid" class="vacancies-grid">
-        <!-- Rendered by app.js -->
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Conectando con las planillas oficiales del Ministerio de Educación...</p>
-        </div>
-      </section>
+          <div class="stat-card" data-redpam-stat="gratis">
+            <div class="stat-icon icon-emerald"><i class="fa-solid fa-gift"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statRedpamGratis">0</span>
+              <span class="stat-label">Gratuitos</span>
+            </div>
+            <span class="stat-badge stat-badge-emerald">Sin costo</span>
+          </div>
 
-      <!-- Empty State -->
-      <div id="emptyState" class="empty-state hidden">
-        <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
-        <h3>No se encontraron vacantes con los filtros seleccionados</h3>
-        <p>Prueba seleccionando "Todas las materias" o cambiando la localidad para ver publicaciones recientes.</p>
-        <button id="btnResetFilters" class="btn btn-secondary">Restablecer filtros</button>
+          <div class="stat-card" data-redpam-stat="virtual">
+            <div class="stat-icon icon-purple"><i class="fa-solid fa-laptop-code"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statRedpamVirtual">0</span>
+              <span class="stat-label">100% Virtuales</span>
+            </div>
+            <span class="stat-badge">A Distancia</span>
+          </div>
+
+          <div class="stat-card" data-redpam-stat="secundario">
+            <div class="stat-icon icon-cyan"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="statRedpamSecundario">0</span>
+              <span class="stat-label">Nivel Secundario</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- RedPam Controls Bar -->
+        <section class="controls-card">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="redpamSearchInput" placeholder="Buscar por título, oferente, temática (ESI, Inglés, TIC, Inclusión)..." autocomplete="off">
+            <button id="btnClearRedpamSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="filter-pills-row">
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-filter"></i> Temática / Área:</span>
+              <div class="pills-container" id="redpamCategoryPills">
+                <button class="pill-btn active" data-redpam-category="all">Todos los cursos</button>
+                <button class="pill-btn" data-redpam-category="ingles">Inglés</button>
+                <button class="pill-btn" data-redpam-category="lengua">Lengua / Literatura</button>
+                <button class="pill-btn" data-redpam-category="esi">ESI y Género</button>
+                <button class="pill-btn" data-redpam-category="inclusion">Inclusión y Diversidad</button>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-school"></i> Nivel Educativo:</span>
+              <select id="redpamLevelSelect" class="form-select form-select-sm">
+                <option value="all">Todos los niveles</option>
+                <option value="Secundario">Secundario</option>
+                <option value="Primario">Primario</option>
+                <option value="Inicial">Inicial</option>
+                <option value="Superior">Superior</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-chalkboard-user"></i> Modalidad:</span>
+              <select id="redpamModalitySelect" class="form-select form-select-sm">
+                <option value="all">Todas las modalidades</option>
+                <option value="Virtual">Virtual</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Semipresencial">Semipresencial / Mixta</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label"><i class="fa-solid fa-tag"></i> Costo:</span>
+              <select id="redpamCostSelect" class="form-select form-select-sm">
+                <option value="all">Todos (Gratuitos y Arancelados)</option>
+                <option value="Gratuito">🟢 Solo Gratuitos</option>
+                <option value="Arancelado">🟠 Arancelados</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- RedPam Section Header -->
+        <section class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title" id="redpamResultsTitle">Propuestas Formativas RedPam</h2>
+            <span class="results-badge" id="redpamResultsCount">0 encontradas</span>
+          </div>
+          <div class="section-meta">
+            <a href="https://redpam.lapampa.edu.ar/propuestas" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Portal RedPam Oficial
+            </a>
+          </div>
+        </section>
+
+        <!-- RedPam Grid List -->
+        <section id="redpamGrid" class="redpam-grid">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando cursos y capacitaciones de RedPam...</p>
+          </div>
+        </section>
+
+        <!-- RedPam Empty State -->
+        <div id="emptyStateRedpam" class="empty-state hidden">
+          <div class="empty-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h3>No se encontraron propuestas con los filtros seleccionados</h3>
+          <p>Prueba buscando con otros términos o seleccionando "Todos los cursos".</p>
+          <button id="btnResetRedpamFilters" class="btn btn-secondary">Restablecer filtros de RedPam</button>
+        </div>
       </div>
     </main>
 
@@ -243,6 +385,9 @@
           <p class="text-muted text-xs">Datos sincronizados con las planillas oficiales del Tribunal de Clasificación de Educación Secundaria.</p>
         </div>
         <div class="footer-links">
+          <a href="https://redpam.lapampa.edu.ar/propuestas" target="_blank" rel="noopener" class="footer-link">
+            <i class="fa-solid fa-book-bookmark"></i> Portal RedPam
+          </a>
           <a href="https://vozporvos.lapampa.edu.ar/" target="_blank" rel="noopener" class="footer-link">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> Portal Voz por Vos
           </a>

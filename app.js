@@ -18,6 +18,16 @@ const state = {
   isScanning: false,
   lastUpdated: null,
   seenIds: new Set(),
+  activeTab: 'designaciones', // 'designaciones' | 'redpam'
+  redpamCourses: [],
+  filteredRedpamCourses: [],
+  redpamFilters: {
+    category: 'all', // 'all' | 'ingles' | 'lengua' | 'esi' | 'inclusion'
+    level: 'all',    // 'all' | 'Secundario' | 'Primario' | 'Inicial' | 'Superior'
+    modality: 'all', // 'all' | 'Virtual' | 'Presencial' | 'Semipresencial'
+    cost: 'all',     // 'all' | 'Gratuito' | 'Arancelado'
+    search: ''
+  },
   customKeywords: [
     { id: 'ingles', label: 'Inglés', patterns: ['ingles', 'inglés', 'lengua extranjera: ingles', 'lengua extranjera inglés'] },
     { id: 'lengua', label: 'Lengua y Literatura', patterns: ['lengua', 'lengua y literatura', 'literatura', 'practicas del lenguaje', 'prácticas del lenguaje'] }
@@ -420,6 +430,8 @@ function updateStats() {
   const propEl = document.getElementById('statPropuestas');
   if (propEl) propEl.textContent = propuestas;
   document.getElementById('statOtras').textContent = Math.max(0, otras);
+  const badgeDesig = document.getElementById('badgeDesignacionesCount');
+  if (badgeDesig) badgeDesig.textContent = total;
 }
 
 function updateResultsCountUI() {
@@ -456,6 +468,222 @@ function setScanningState(scanning) {
   } else {
     if (icon) icon.classList.remove('fa-spin');
     if (statusText) statusText.textContent = 'Monitoreando';
+  }
+}
+
+// ==========================================================================
+// Módulo RedPam: Carga, Filtrado y Renderizado
+// ==========================================================================
+async function fetchRedPamCourses(forceRefresh = false) {
+  let loaded = false;
+
+  // 1. Intentar endpoint de API Node.js si está corriendo el servidor
+  try {
+    const url = forceRefresh ? '/api/redpam?refresh=true' : '/api/redpam';
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      applyRedPamData(data);
+      loaded = true;
+    }
+  } catch (e) {
+    // Si no hay API backend, usar archivo estático
+  }
+
+  // 2. Si falló la API, cargar del archivo estático data/latest_redpam.json
+  if (!loaded) {
+    try {
+      const res = await fetch('data/latest_redpam.json?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        applyRedPamData(data);
+        loaded = true;
+      }
+    } catch (e) {
+      console.warn('No se pudo cargar data/latest_redpam.json:', e);
+    }
+  }
+}
+
+function applyRedPamData(data) {
+  state.redpamCourses = data.courses || [];
+  updateRedPamStats();
+  applyRedPamFilters();
+}
+
+function updateRedPamStats() {
+  const total = state.redpamCourses.length;
+  let gratis = 0;
+  let virtual = 0;
+  let secundario = 0;
+
+  state.redpamCourses.forEach(c => {
+    const oferta = normalize(c.tipoOferta || '');
+    const mod = normalize(c.modalidad || '');
+    const niv = normalize(c.niveles || '');
+
+    if (oferta.includes('gratis') || oferta.includes('gratuito')) gratis++;
+    if (mod.includes('virtual') || mod.includes('distancia')) virtual++;
+    if (niv.includes('secundari')) secundario++;
+  });
+
+  const statTotal = document.getElementById('statRedpamTotal');
+  if (statTotal) statTotal.textContent = total;
+  const statGratis = document.getElementById('statRedpamGratis');
+  if (statGratis) statGratis.textContent = gratis;
+  const statVirtual = document.getElementById('statRedpamVirtual');
+  if (statVirtual) statVirtual.textContent = virtual;
+  const statSecundario = document.getElementById('statRedpamSecundario');
+  if (statSecundario) statSecundario.textContent = secundario;
+
+  const badgeRedpam = document.getElementById('badgeRedpamCount');
+  if (badgeRedpam) badgeRedpam.textContent = total;
+}
+
+function applyRedPamFilters() {
+  const q = normalize(state.redpamFilters.search);
+
+  state.filteredRedpamCourses = state.redpamCourses.filter(c => {
+    // 1. Filtro temático de pills
+    if (state.redpamFilters.category !== 'all') {
+      const target = state.redpamFilters.category;
+      const titleNorm = normalize(c.title);
+      const destNorm = normalize(c.destinatarios);
+
+      if (target === 'ingles' && !titleNorm.includes('ingles') && !destNorm.includes('ingles')) return false;
+      if (target === 'lengua' && !titleNorm.includes('lengua') && !titleNorm.includes('literatura')) return false;
+      if (target === 'esi' && !titleNorm.includes('esi') && !titleNorm.includes('sexualidad') && !titleNorm.includes('genero')) return false;
+      if (target === 'inclusion' && !titleNorm.includes('inclusi') && !titleNorm.includes('diversidad')) return false;
+    }
+
+    // 2. Filtro de Nivel
+    if (state.redpamFilters.level !== 'all') {
+      const nivNorm = normalize(c.niveles);
+      if (!nivNorm.includes(normalize(state.redpamFilters.level))) return false;
+    }
+
+    // 3. Filtro de Modalidad
+    if (state.redpamFilters.modality !== 'all') {
+      const modNorm = normalize(c.modalidad);
+      if (!modNorm.includes(normalize(state.redpamFilters.modality))) return false;
+    }
+
+    // 4. Filtro de Costo
+    if (state.redpamFilters.cost !== 'all') {
+      const costNorm = normalize(c.tipoOferta);
+      if (state.redpamFilters.cost === 'Gratuito' && !costNorm.includes('gratuito') && !costNorm.includes('gratis')) return false;
+      if (state.redpamFilters.cost === 'Arancelado' && !costNorm.includes('arancelado')) return false;
+    }
+
+    // 5. Búsqueda por texto libre
+    if (q) {
+      const fullText = normalize(`${c.title} ${c.oferente} ${c.niveles} ${c.destinatarios} ${c.modalidad}`);
+      if (!fullText.includes(q)) return false;
+    }
+
+    return true;
+  });
+
+  renderRedPamCourses();
+  updateRedPamCountUI();
+}
+
+function renderRedPamCourses() {
+  const grid = document.getElementById('redpamGrid');
+  const emptyState = document.getElementById('emptyStateRedpam');
+  if (!grid) return;
+
+  if (state.filteredRedpamCourses.length === 0) {
+    grid.innerHTML = '';
+    if (emptyState) emptyState.classList.remove('hidden');
+    return;
+  }
+
+  if (emptyState) emptyState.classList.add('hidden');
+
+  grid.innerHTML = state.filteredRedpamCourses.map(c => {
+    const ofertaNorm = normalize(c.tipoOferta || '');
+    const isGratis = ofertaNorm.includes('gratis') || ofertaNorm.includes('gratuito');
+    const costBadgeClass = isGratis ? 'badge-cost-gratis' : 'badge-cost-arancelado';
+    const isOficial = normalize(c.valoracion || '').includes('oficial');
+
+    return `
+      <article class="course-card" id="course-${c.id}">
+        <div class="course-card-image-wrap">
+          <img src="${c.img}" alt="${c.title}" class="course-card-image" loading="lazy" onerror="this.onerror=null;this.src='https://redpam.lapampa.edu.ar/images/Roles-V%C3%ADnculos-ESI.jpg';">
+          <div class="course-card-badges">
+            <span class="badge-cost ${costBadgeClass}">
+              <i class="fa-solid ${isGratis ? 'fa-gift' : 'fa-tag'}"></i> ${c.tipoOferta || (isGratis ? 'Gratuito' : 'Arancelado')}
+            </span>
+            ${isOficial ? '<span class="badge-official"><i class="fa-solid fa-award"></i> Oficial</span>' : ''}
+          </div>
+        </div>
+
+        <div class="course-card-body">
+          <div class="course-oferente-tag">
+            <i class="fa-solid fa-university"></i> ${c.oferente || 'RedPam'}
+          </div>
+
+          <h3 class="course-title" title="${c.title}">${c.title}</h3>
+
+          <div class="course-meta-tags">
+            <span class="course-tag course-tag-highlight">
+              <i class="fa-solid fa-laptop"></i> ${c.modalidad || 'Virtual'}
+            </span>
+            <span class="course-tag">
+              <i class="fa-solid fa-clock"></i> ${c.horas || 'Horas a certificar'}
+            </span>
+            ${c.fecha ? `<span class="course-tag"><i class="fa-regular fa-calendar"></i> ${c.fecha}</span>` : ''}
+          </div>
+
+          <div class="course-details-box">
+            <div class="course-detail-row">
+              <strong><i class="fa-solid fa-school"></i> Niveles:</strong>
+              <span title="${c.niveles}">${c.niveles || 'Todos'}</span>
+            </div>
+            <div class="course-detail-row">
+              <strong><i class="fa-solid fa-users"></i> Destinatarios:</strong>
+              <span title="${c.destinatarios}">${c.destinatarios || 'Docentes en general'}</span>
+            </div>
+          </div>
+
+          <div class="course-card-footer">
+            <a href="${c.link}" target="_blank" rel="noopener" class="btn-enroll">
+              <span>Ver detalles e inscripción</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function updateRedPamCountUI() {
+  const count = state.filteredRedpamCourses.length;
+  const countEl = document.getElementById('redpamResultsCount');
+  if (countEl) {
+    countEl.textContent = `${count} ${count === 1 ? 'propuesta encontrada' : 'propuestas encontradas'}`;
+  }
+}
+
+function switchTab(tabName) {
+  state.activeTab = tabName;
+  const tabBtnDesig = document.getElementById('tabDesignaciones');
+  const tabBtnRedpam = document.getElementById('tabRedpam');
+  const secDesig = document.getElementById('sectionDesignaciones');
+  const secRedpam = document.getElementById('sectionRedpam');
+
+  if (tabName === 'designaciones') {
+    if (tabBtnDesig) tabBtnDesig.classList.add('active');
+    if (tabBtnRedpam) tabBtnRedpam.classList.remove('active');
+    if (secDesig) secDesig.classList.remove('hidden');
+    if (secRedpam) secRedpam.classList.add('hidden');
+  } else {
+    if (tabBtnRedpam) tabBtnRedpam.classList.add('active');
+    if (tabBtnDesig) tabBtnDesig.classList.remove('active');
+    if (secRedpam) secRedpam.classList.remove('hidden');
+    if (secDesig) secDesig.classList.add('hidden');
   }
 }
 
@@ -847,9 +1075,142 @@ function setupEventListeners() {
     applyFilters();
   });
 
-  // Botón Escanear Ahora
-  document.getElementById('btnScanNow').addEventListener('click', () => {
-    fetchVacancies(true);
+  // Pestañas Principales (Secundaria vs RedPam)
+  const tabDesig = document.getElementById('tabDesignaciones');
+  const tabRedpam = document.getElementById('tabRedpam');
+  if (tabDesig) tabDesig.addEventListener('click', () => switchTab('designaciones'));
+  if (tabRedpam) tabRedpam.addEventListener('click', () => switchTab('redpam'));
+
+  // RedPam: Filtro de Categoría (Pills)
+  const redpamPills = document.querySelectorAll('#redpamCategoryPills .pill-btn');
+  redpamPills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      redpamPills.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.redpamFilters.category = btn.getAttribute('data-redpam-category');
+      applyRedPamFilters();
+    });
+  });
+
+  // RedPam: Filtro de Nivel
+  const redpamLevel = document.getElementById('redpamLevelSelect');
+  if (redpamLevel) {
+    redpamLevel.addEventListener('change', (e) => {
+      state.redpamFilters.level = e.target.value;
+      applyRedPamFilters();
+    });
+  }
+
+  // RedPam: Filtro de Modalidad
+  const redpamModality = document.getElementById('redpamModalitySelect');
+  if (redpamModality) {
+    redpamModality.addEventListener('change', (e) => {
+      state.redpamFilters.modality = e.target.value;
+      applyRedPamFilters();
+    });
+  }
+
+  // RedPam: Filtro de Costo
+  const redpamCost = document.getElementById('redpamCostSelect');
+  if (redpamCost) {
+    redpamCost.addEventListener('change', (e) => {
+      state.redpamFilters.cost = e.target.value;
+      applyRedPamFilters();
+    });
+  }
+
+  // RedPam: Búsqueda
+  const redpamSearchInput = document.getElementById('redpamSearchInput');
+  const btnClearRedpamSearch = document.getElementById('btnClearRedpamSearch');
+  if (redpamSearchInput) {
+    redpamSearchInput.addEventListener('input', (e) => {
+      state.redpamFilters.search = e.target.value;
+      if (btnClearRedpamSearch) {
+        if (state.redpamFilters.search) {
+          btnClearRedpamSearch.classList.remove('hidden');
+        } else {
+          btnClearRedpamSearch.classList.add('hidden');
+        }
+      }
+      applyRedPamFilters();
+    });
+  }
+
+  if (btnClearRedpamSearch) {
+    btnClearRedpamSearch.addEventListener('click', () => {
+      if (redpamSearchInput) redpamSearchInput.value = '';
+      state.redpamFilters.search = '';
+      btnClearRedpamSearch.classList.add('hidden');
+      applyRedPamFilters();
+    });
+  }
+
+  // RedPam: Tarjetas de estadísticas interactivas
+  const redpamStatCards = document.querySelectorAll('[data-redpam-stat]');
+  redpamStatCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const statType = card.getAttribute('data-redpam-stat');
+      redpamStatCards.forEach(c => c.classList.remove('stat-card-active'));
+      card.classList.add('stat-card-active');
+
+      if (statType === 'all') {
+        state.redpamFilters.category = 'all';
+        state.redpamFilters.cost = 'all';
+        state.redpamFilters.modality = 'all';
+        state.redpamFilters.level = 'all';
+      } else if (statType === 'gratis') {
+        state.redpamFilters.cost = 'Gratuito';
+        if (redpamCost) redpamCost.value = 'Gratuito';
+      } else if (statType === 'virtual') {
+        state.redpamFilters.modality = 'Virtual';
+        if (redpamModality) redpamModality.value = 'Virtual';
+      } else if (statType === 'secundario') {
+        state.redpamFilters.level = 'Secundario';
+        if (redpamLevel) redpamLevel.value = 'Secundario';
+      }
+      applyRedPamFilters();
+    });
+  });
+
+  // RedPam: Restablecer Filtros
+  const btnResetRedpam = document.getElementById('btnResetRedpamFilters');
+  if (btnResetRedpam) {
+    btnResetRedpam.addEventListener('click', () => {
+      state.redpamFilters = {
+        category: 'all',
+        level: 'all',
+        modality: 'all',
+        cost: 'all',
+        search: ''
+      };
+      if (redpamSearchInput) redpamSearchInput.value = '';
+      if (btnClearRedpamSearch) btnClearRedpamSearch.classList.add('hidden');
+      if (redpamLevel) redpamLevel.value = 'all';
+      if (redpamModality) redpamModality.value = 'all';
+      if (redpamCost) redpamCost.value = 'all';
+
+      redpamPills.forEach(b => {
+        if (b.getAttribute('data-redpam-category') === 'all') b.classList.add('active');
+        else b.classList.remove('active');
+      });
+
+      redpamStatCards.forEach(c => {
+        if (c.getAttribute('data-redpam-stat') === 'all') c.classList.add('stat-card-active');
+        else c.classList.remove('stat-card-active');
+      });
+
+      applyRedPamFilters();
+    });
+  }
+
+  // Botón Escanear Ahora (Actualiza tanto vacantes como RedPam)
+  document.getElementById('btnScanNow').addEventListener('click', async () => {
+    setScanningState(true);
+    await Promise.all([
+      fetchVacancies(true),
+      fetchRedPamCourses(true)
+    ]);
+    setScanningState(false);
   });
 
   // Sonido de Alertas Toggle
@@ -890,7 +1251,7 @@ function setupEventListeners() {
     }
   });
 
-  // Restablecer Filtros
+  // Restablecer Filtros de Secundaria
   document.getElementById('btnResetFilters').addEventListener('click', () => {
     state.searchQuery = '';
     state.selectedLocality = 'all';
@@ -924,11 +1285,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupTelegramModal();
   setupKeywordsModal();
   await loadSedesData();
-  await fetchVacancies();
+  await Promise.all([
+    fetchVacancies(),
+    fetchRedPamCourses()
+  ]);
 
   // Chequeo automático periódico en el cliente cada 5 minutos
   setInterval(() => {
-    console.log('⏰ Verificación periódica de vacantes en segundo plano...');
+    console.log('⏰ Verificación periódica en segundo plano...');
     fetchVacancies(false);
+    fetchRedPamCourses(false);
   }, 5 * 60 * 1000);
 });

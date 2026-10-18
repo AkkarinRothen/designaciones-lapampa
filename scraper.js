@@ -285,6 +285,121 @@ async function sendTelegramNotification(botToken, chatId, vacantes) {
   return true;
 }
 
+async function scrapeRedPam() {
+  try {
+    const html = await fetchText('https://redpam.lapampa.edu.ar/propuestas');
+    const items = [];
+    const itemRegex = /<div class="item column-[^"]*"[^>]*itemprop="blogPost"[\s\S]*?<!-- end item -->/gi;
+    let match;
+    while ((match = itemRegex.exec(html)) !== null) {
+      const block = match[0];
+
+      const titleMatch = block.match(/<h2[^>]*itemprop="name"[\s\S]*?<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/i);
+      const link = titleMatch ? 'https://redpam.lapampa.edu.ar' + titleMatch[1] : '';
+      const title = titleMatch ? titleMatch[2].replace(/<[^>]+>/g, '').trim() : '';
+
+      const imgMatch = block.match(/<img[^>]*src="([^"]*)"/i);
+      const img = imgMatch ? (imgMatch[1].startsWith('http') ? imgMatch[1] : 'https://redpam.lapampa.edu.ar' + imgMatch[1]) : '';
+
+      const getField = (label) => {
+        const regex = new RegExp(`<strong>\\s*${label}:?\\s*<\\/strong>([\\s\\S]*?)<\\/(?:p|span|div)>`, 'i');
+        const m = block.match(regex);
+        return m ? m[1].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
+      };
+
+      const oferente = getField('Oferente');
+      const horas = getField('Carga horaria');
+      const modalidad = getField('Modalidad');
+      const fecha = getField('Fecha de cursada');
+      const tipoOferta = getField('Tipo de oferta');
+      const valoracion = getField('Tipo de valoraci[oó]n');
+
+      const speechMatch = block.match(/SpeechSynthesisUtterance\(['"]([\s\S]*?)['"]\)/i);
+      const speechText = speechMatch ? speechMatch[1] : '';
+
+      let niveles = '';
+      const nivMatch = speechText.match(/Niveles:\s*([^\.]+)/i);
+      if (nivMatch) niveles = nivMatch[1].trim();
+
+      let destinatarios = '';
+      const destMatch = speechText.match(/Destinatarios\/as:\s*([^\.]+)/i);
+      if (destMatch) destinatarios = destMatch[1].trim();
+
+      const matchedCategory = matchesKeywords(title);
+
+      if (title) {
+        items.push({
+          id: 'redpam_' + (titleMatch ? titleMatch[1].replace(/[^a-zA-Z0-9]/g, '_') : Date.now()),
+          title,
+          link,
+          img,
+          oferente: oferente || 'Ministerio de Educación La Pampa',
+          horas: horas || 'Consultar',
+          modalidad: modalidad || 'Virtual',
+          fecha: fecha || '2026',
+          tipoOferta: tipoOferta || 'Oficial',
+          valoracion: valoracion || 'Oficial',
+          niveles: niveles || 'Secundario / Primario / Superior',
+          destinatarios: destinatarios || 'Docentes',
+          matchedCategory: matchedCategory || null,
+          scrapedAt: new Date().toISOString()
+        });
+      }
+    }
+    return items;
+  } catch (err) {
+    console.error('Error scrapeando RedPam:', err.message);
+    return [];
+  }
+}
+
+async function sendTelegramCourseNotification(botToken, chatId, courses) {
+  if (!botToken || !chatId || courses.length === 0) return false;
+
+  for (const c of courses) {
+    const isGratuito = (c.tipoOferta || '').toLowerCase().includes('gratuito');
+    const costoBadge = isGratuito ? '🟢 *GRATUITO*' : '🟡 *Arancelado*';
+
+    const message = `🎓 *¡NUEVA CAPACITACIÓN EN REDPAM!*
+
+📚 *Propuesta:* *${c.title}*
+🏫 *Oferente:* ${c.oferente}
+⏱️ *Carga horaria:* ${c.horas} | *Modalidad:* ${c.modalidad}
+💰 *Costo:* ${costoBadge} | *Valoración:* ${c.valoracion}
+🎯 *Niveles:* ${c.niveles}
+👥 *Destinatarios:* ${c.destinatarios}
+📅 *Fecha:* ${c.fecha}
+
+🔗 [Ver detalles e inscripción en RedPam](${c.link})`;
+
+    const postData = JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'Markdown',
+      disable_web_page_preview: false
+    });
+
+    await new Promise((resolve) => {
+      const req = https.request({
+        hostname: 'api.telegram.org',
+        path: `/bot${botToken}/sendMessage`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      }, (res) => {
+        res.on('data', () => {});
+        res.on('end', resolve);
+      });
+      req.on('error', () => resolve());
+      req.write(postData);
+      req.end();
+    });
+  }
+  return true;
+}
+
 // Si se ejecuta directamente desde línea de comandos
 if (require.main === module) {
   (async () => {
@@ -293,23 +408,35 @@ if (require.main === module) {
     const botToken = args[0] || process.env.TELEGRAM_BOT_TOKEN;
     const chatId = args[1] || process.env.TELEGRAM_CHAT_ID;
 
+    console.log('🚀 Iniciando escaneo de designaciones en Zona Centro y cursos RedPam...');
+
+    // 1. Escaneo de Designaciones
     const vacantes = await scrapeAll();
     const filtradas = vacantes.filter(v => v.matchedCategory !== null);
 
-    console.log(`✅ Escaneo finalizado. Total vacantes: ${vacantes.length}. De interés (Inglés/Lengua): ${filtradas.length}`);
+    console.log(`✅ Designaciones: ${vacantes.length} total. De interés (Inglés/Lengua): ${filtradas.length}`);
 
     // Asegurar directorio data/
     const dataDir = path.join(__dirname, 'data');
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
-    // Guardar último resultado para GitHub Pages / frontend estático
     fs.writeFileSync(path.join(dataDir, 'latest_vacantes.json'), JSON.stringify({
       updatedAt: new Date().toISOString(),
       total: vacantes.length,
       vacantes: vacantes
     }, null, 2), 'utf8');
 
-    // Manejo de caché para evitar notificaciones repetidas
+    // 2. Escaneo de RedPam
+    const redpamCourses = await scrapeRedPam();
+    console.log(`✅ RedPam: ${redpamCourses.length} cursos/propuestas formativas encontradas.`);
+
+    fs.writeFileSync(path.join(dataDir, 'latest_redpam.json'), JSON.stringify({
+      updatedAt: new Date().toISOString(),
+      total: redpamCourses.length,
+      courses: redpamCourses
+    }, null, 2), 'utf8');
+
+    // Notificaciones de Designaciones
     const cacheFile = path.join(dataDir, 'seen_ids.json');
     let seenIds = [];
     if (fs.existsSync(cacheFile) && !isForce) {
@@ -324,23 +451,49 @@ if (require.main === module) {
       console.log(`📢 ¡Se encontraron ${nuevasParaAvisar.length} nuevas vacantes para notificar!`);
       if (botToken && chatId) {
         await sendTelegramNotification(botToken, chatId, nuevasParaAvisar);
-        console.log('📲 Notificaciones enviadas por Telegram exitosamente.');
-      } else {
-        console.log('ℹ️ No se configuraron TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID en las variables de entorno.');
+        console.log('📲 Notificaciones de vacantes enviadas por Telegram.');
       }
-
-      // Actualizar seen_ids
       const updatedIds = Array.from(new Set([...seenIds, ...nuevasParaAvisar.map(v => v.id)]));
       fs.writeFileSync(cacheFile, JSON.stringify(updatedIds, null, 2), 'utf8');
-    } else {
-      console.log('✨ No hay nuevas vacantes desde el último escaneo.');
     }
+
+    // Notificaciones de Cursos RedPam (Selectivas)
+    const cacheCoursesFile = path.join(dataDir, 'seen_courses.json');
+    let seenCourseIds = [];
+    if (fs.existsSync(cacheCoursesFile) && !isForce) {
+      try {
+        seenCourseIds = JSON.parse(fs.readFileSync(cacheCoursesFile, 'utf8'));
+      } catch (e) {}
+    }
+
+    const cursosPrioritarios = redpamCourses.filter(c => {
+      const isMatch = c.matchedCategory !== null;
+      const isGratuitoSecundario = (c.tipoOferta || '').toLowerCase().includes('gratuito') &&
+                                   (c.niveles || '').toLowerCase().includes('secundari');
+      return isMatch || isGratuitoSecundario;
+    });
+
+    const nuevosCursosAvisar = isForce ? cursosPrioritarios : cursosPrioritarios.filter(c => !seenCourseIds.includes(c.id));
+
+    if (nuevosCursosAvisar.length > 0) {
+      console.log(`📢 ¡Se encontraron ${nuevosCursosAvisar.length} nuevas propuestas de RedPam para notificar!`);
+      if (botToken && chatId) {
+        await sendTelegramCourseNotification(botToken, chatId, nuevosCursosAvisar);
+        console.log('📲 Notificaciones de cursos enviadas por Telegram.');
+      }
+      const updatedCourseIds = Array.from(new Set([...seenCourseIds, ...nuevosCursosAvisar.map(c => c.id)]));
+      fs.writeFileSync(cacheCoursesFile, JSON.stringify(updatedCourseIds, null, 2), 'utf8');
+    }
+
+    console.log('✨ Proceso de monitoreo finalizado exitosamente.');
   })();
 }
 
 module.exports = {
   scrapeAll,
   scrapeLocality,
+  scrapeRedPam,
   sendTelegramNotification,
+  sendTelegramCourseNotification,
   DEFAULT_KEYWORDS
 };

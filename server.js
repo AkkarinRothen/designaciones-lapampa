@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
-const { scrapeAll, sendTelegramNotification, DEFAULT_KEYWORDS } = require('./scraper');
+const { scrapeAll, scrapeLocality, scrapeRedPam, sendTelegramNotification, sendTelegramCourseNotification, DEFAULT_KEYWORDS } = require('./scraper');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +20,7 @@ if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 let isScanning = false;
 let lastScanTime = null;
 let cachedVacantes = [];
+let cachedRedpam = [];
 
 // Cargar caché inicial si existe
 const latestPath = path.join(dataDir, 'latest_vacantes.json');
@@ -28,6 +29,14 @@ if (fs.existsSync(latestPath)) {
     const raw = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
     cachedVacantes = raw.vacantes || [];
     lastScanTime = raw.updatedAt || null;
+  } catch (e) {}
+}
+
+const latestRedpamPath = path.join(dataDir, 'latest_redpam.json');
+if (fs.existsSync(latestRedpamPath)) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(latestRedpamPath, 'utf8'));
+    cachedRedpam = raw.courses || [];
   } catch (e) {}
 }
 
@@ -68,14 +77,48 @@ async function runScan(triggerSource = 'manual') {
       fs.writeFileSync(cacheFile, JSON.stringify(updatedIds, null, 2), 'utf8');
     }
 
-    console.log(`[${new Date().toLocaleTimeString()}] Escaneo completado. Total: ${vacantes.length}`);
+    // 2. Escaneo de RedPam
+    try {
+      const courses = await scrapeRedPam();
+      cachedRedpam = courses;
+      fs.writeFileSync(latestRedpamPath, JSON.stringify({
+        updatedAt: lastScanTime,
+        total: courses.length,
+        courses
+      }, null, 2), 'utf8');
+
+      // Notificaciones de Cursos
+      const cacheCoursesFile = path.join(dataDir, 'seen_courses.json');
+      let seenCourseIds = [];
+      if (fs.existsSync(cacheCoursesFile)) {
+        try { seenCourseIds = JSON.parse(fs.readFileSync(cacheCoursesFile, 'utf8')); } catch (e) {}
+      }
+
+      const cursosPrioritarios = courses.filter(c => {
+        const isMatch = c.matchedCategory !== null;
+        const isGratuitoSecundario = (c.tipoOferta || '').toLowerCase().includes('gratuito') &&
+                                     (c.niveles || '').toLowerCase().includes('secundari');
+        return isMatch || isGratuitoSecundario;
+      });
+
+      const nuevosCursos = cursosPrioritarios.filter(c => !seenCourseIds.includes(c.id));
+      if (nuevosCursos.length > 0 && botToken && chatId) {
+        await sendTelegramCourseNotification(botToken, chatId, nuevosCursos);
+        const updatedCourseIds = Array.from(new Set([...seenCourseIds, ...nuevosCursos.map(c => c.id)]));
+        fs.writeFileSync(cacheCoursesFile, JSON.stringify(updatedCourseIds, null, 2), 'utf8');
+      }
+    } catch (eRedPam) {
+      console.error('Error sincronizando RedPam:', eRedPam);
+    }
+
+    console.log(`[${new Date().toLocaleTimeString()}] Escaneo completado. Vacantes: ${vacantes.length}, RedPam: ${cachedRedpam.length}`);
   } catch (err) {
     console.error('Error durante el escaneo:', err);
   } finally {
     isScanning = false;
   }
 
-  return { scanning: false, lastScanTime, vacantes: cachedVacantes };
+  return { scanning: false, lastScanTime, vacantes: cachedVacantes, redpam: cachedRedpam };
 }
 
 // Rutas de API
@@ -102,6 +145,24 @@ app.get('/api/vacantes', async (req, res) => {
     updatedAt: lastScanTime,
     total: cachedVacantes.length,
     vacantes: cachedVacantes
+  });
+});
+
+app.get('/api/redpam', async (req, res) => {
+  if (req.query.refresh === 'true' || cachedRedpam.length === 0) {
+    const courses = await scrapeRedPam();
+    cachedRedpam = courses;
+    return res.json({
+      updatedAt: new Date().toISOString(),
+      total: courses.length,
+      courses
+    });
+  }
+
+  res.json({
+    updatedAt: lastScanTime,
+    total: cachedRedpam.length,
+    courses: cachedRedpam
   });
 });
 

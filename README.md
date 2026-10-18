@@ -15,9 +15,13 @@
   - **Inglés** (ej: *Lengua Extranjera: Inglés*, *Inglés*).
   - **Lengua** (ej: *Lengua y Literatura*, *Literatura*, *Prácticas del Lenguaje*).
   - Panel visual interactivo para agregar o editar materias y palabras clave adicionales bajo demanda.
-- 📲 **Alertas Instantáneas por Telegram:** Notificaciones directas a tu celular con todos los detalles de la vacante (colegio, curso, turno, cantidad de horas, carácter y horarios).
+- 📚 **Catálogo de Cursos y Capacitaciones RedPam:** Integración directa con el portal [RedPam](https://redpam.lapampa.edu.ar/propuestas).
+  - Pestañas superiores para alternar entre *Designaciones Secundarias* y *Cursos RedPam*.
+  - Filtros por temática (Inglés, Lengua, ESI, Inclusión), nivel educativo (Secundario, Primario, Inicial, Superior), modalidad (Virtual, Presencial) y costo (Gratuito vs Arancelado).
+  - Notificaciones inteligentes por Telegram cuando surgen propuestas para Inglés/Lengua o gratuitas para Secundaria.
+- 📲 **Alertas Instantáneas por Telegram:** Notificaciones directas a tu celular con todos los detalles de la vacante o curso.
 - 🔔 **Alertas en la Web:** Notificaciones visuales emergentes y timbre sonoro sintetizado (Web Audio API).
-- 🚀 **Acceso Rápido Oficial:** Botones de acceso directo en cada vacante para postularse en [Voz por Vos](https://vozporvos.lapampa.edu.ar/) y para abrir la planilla de cálculo original.
+- 🚀 **Acceso Rápido Oficial:** Botones de acceso directo en cada vacante para postularse en [Voz por Vos](https://vozporvos.lapampa.edu.ar/), planillas originales y páginas de inscripción de cursos.
 - 📤 **Compartir y Copiar:** Copia al portapapeles o comparte directamente en grupos de WhatsApp de colegas docentes.
 - 🌓 **Diseño Moderno:** Interfaz ultra-rápida, responsive (móvil y escritorio) con modo oscuro y modo claro.
 

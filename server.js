@@ -121,6 +121,7 @@ app.post('/api/telegram-test', async (req, res) => {
     division: 'I',
     turno: 'M',
     revista: 'INTERINO',
+    sheetType: 'Propuestas',
     motivo: 'PRUEBA DE ALERTA',
     fechaDesignacion: new Date().toLocaleDateString('es-AR'),
     horarios: 'LU: 0800 0920 | MI: 1000 1120',

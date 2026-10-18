@@ -98,6 +98,15 @@
           <span class="stat-badge">Prioritario</span>
         </div>
 
+        <div class="stat-card" data-filter="propuestas">
+          <div class="stat-icon icon-rose"><i class="fa-solid fa-bolt"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statPropuestas">0</span>
+            <span class="stat-label">Propuestas</span>
+          </div>
+          <span class="stat-badge stat-badge-rose">Convocatoria</span>
+        </div>
+
         <div class="stat-card" data-filter="otras">
           <div class="stat-icon icon-amber"><i class="fa-solid fa-chalkboard-user"></i></div>
           <div class="stat-info">
@@ -124,6 +133,29 @@
               <button class="pill-btn" data-subject="lengua">Solo Lengua</button>
               <button class="pill-btn" data-subject="all">Todas las materias</button>
             </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-bolt"></i> Convocatoria:</span>
+            <select id="sheetTypeSelect" class="form-select form-select-sm">
+              <option value="all">Todas (Propuestas + Interinatos)</option>
+              <option value="Propuestas">⚡ Solo Propuestas</option>
+              <option value="Interinatos y Suplencias">📋 Solo Interinatos y Suplencias</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-clock"></i> Horas:</span>
+            <select id="hoursSelect" class="form-select form-select-sm">
+              <option value="all">Todas las horas</option>
+              <option value="le3">Hasta 3 hs (≤ 3)</option>
+              <option value="4to6">De 4 a 6 hs</option>
+              <option value="gt6">Más de 6 hs (> 6)</option>
+              <option value="eq2">2 hs exactas</option>
+              <option value="eq3">3 hs exactas</option>
+              <option value="eq4">4 hs exactas</option>
+              <option value="eq5">5 hs exactas</option>
+            </select>
           </div>
 
           <div class="filter-group">

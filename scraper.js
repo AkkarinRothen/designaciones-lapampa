@@ -239,11 +239,17 @@ async function sendTelegramNotification(botToken, chatId, vacantes) {
     const turnoMap = { 'M': 'Mañana', 'T': 'Tarde', 'V': 'Vespertino', 'N': 'Noche' };
     const turnoLabel = turnoMap[v.turno.toUpperCase()] || v.turno;
 
-    const message = `🔔 *¡Nueva Designación en Secundaria!*
+    const isPropuesta = v.sheetType === 'Propuestas';
+    const tipoHeader = isPropuesta ? '⚡ *¡NUEVA PROPUESTA EN SECUNDARIA!*' : '🔔 *¡Nueva Designación (Interinatos y Suplencias)!*';
+    const tipoBadge = isPropuesta ? '🏷️ *PROPUESTA*' : '📋 *INTERINATOS Y SUPLENCIAS*';
+
+    const message = `${tipoHeader}
+
+📌 *Convocatoria:* ${tipoBadge}
 📍 *Localidad:* ${v.localidad} (${v.sede})
 🏫 *Colegio:* ${v.colegio}
 📚 *Materia:* *${v.materia}*
-⏱️ *Horas:* ${v.horas} | *Curso:* ${v.curso} ${v.division} | *Turno:* ${turnoLabel}
+⏱️ *Horas:* *${v.horas} hs* | *Curso:* ${v.curso} "${v.division}" | *Turno:* ${turnoLabel}
 📋 *Carácter:* ${v.revista} | *Motivo:* ${v.motivo}
 📅 *Fecha:* ${v.fechaDesignacion}
 ⏰ *Horarios:* ${v.horarios}

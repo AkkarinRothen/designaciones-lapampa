@@ -9,6 +9,8 @@ const state = {
   filteredVacantes: [],
   sedesData: [],
   activeSubjectFilter: 'priority', // 'priority' | 'ingles' | 'lengua' | 'all'
+  selectedSheetType: 'all', // 'all' | 'Propuestas' | 'Interinatos y Suplencias'
+  selectedHours: 'all', // 'all' | 'le3' | '4to6' | 'gt6' | 'eq2' | 'eq3' | 'eq4' | 'eq5'
   selectedLocality: 'all',
   selectedShift: 'all',
   searchQuery: '',
@@ -231,17 +233,35 @@ function applyFilters() {
       if (!cat.includes('lengua') && !cat.includes('literatura')) return false;
     }
 
-    // 2. Filtro de Localidad
+    // 2. Filtro de Convocatoria / Tipo de Planilla (Propuestas vs Interinatos)
+    if (state.selectedSheetType !== 'all') {
+      if (v.sheetType !== state.selectedSheetType) return false;
+    }
+
+    // 3. Filtro de Carga Horaria
+    if (state.selectedHours !== 'all') {
+      const hs = parseInt(v.horas, 10);
+      if (isNaN(hs)) return false;
+      if (state.selectedHours === 'le3' && hs > 3) return false;
+      if (state.selectedHours === '4to6' && (hs < 4 || hs > 6)) return false;
+      if (state.selectedHours === 'gt6' && hs <= 6) return false;
+      if (state.selectedHours === 'eq2' && hs !== 2) return false;
+      if (state.selectedHours === 'eq3' && hs !== 3) return false;
+      if (state.selectedHours === 'eq4' && hs !== 4) return false;
+      if (state.selectedHours === 'eq5' && hs !== 5) return false;
+    }
+
+    // 4. Filtro de Localidad
     if (state.selectedLocality !== 'all') {
       if (v.localidad !== state.selectedLocality) return false;
     }
 
-    // 3. Filtro de Turno
+    // 5. Filtro de Turno
     if (state.selectedShift !== 'all') {
       if ((v.turno || '').toUpperCase() !== state.selectedShift) return false;
     }
 
-    // 4. Búsqueda de texto libre
+    // 6. Búsqueda de texto libre
     if (query) {
       const searchBlob = normalize(`${v.colegio} ${v.materia} ${v.localidad} ${v.curso} ${v.division} ${v.motivo} ${v.revista} ${v.cupof}`);
       if (!searchBlob.includes(query)) return false;
@@ -281,12 +301,18 @@ function renderVacancies() {
       catBadgeClass = 'category-lengua';
     }
 
+    const isPropuesta = v.sheetType === 'Propuestas';
+    if (isPropuesta) {
+      cardClass += ' is-propuesta';
+    }
+
     const turnoMap = { 'M': 'Mañana', 'T': 'Tarde', 'V': 'Vespertino', 'N': 'Noche' };
     const turnoName = turnoMap[(v.turno || '').toUpperCase()] || v.turno || 'A definir';
 
     const copyText = `📚 *Vacante en Secundaria*: ${v.materia}
+📌 *Convocatoria*: ${isPropuesta ? '⚡ PROPUESTA' : '📋 Interinatos y Suplencias'}
 🏫 ${v.colegio} - ${v.localidad}
-⏱️ ${v.horas} Horas | Curso: ${v.curso} ${v.division} | Turno: ${turnoName}
+⏱️ ${v.horas} Horas | Curso: ${v.curso} "${v.division}" | Turno: ${turnoName}
 📋 ${v.revista} (${v.motivo})
 📅 Fecha de designación: ${v.fechaDesignacion}
 ⏰ Horarios: ${v.horarios}
@@ -297,9 +323,14 @@ function renderVacancies() {
     return `
       <article class="${cardClass}" id="card-${v.id}">
         <div class="card-top">
-          <span class="locality-badge">
-            <i class="fa-solid fa-location-dot"></i> ${v.localidad}
-          </span>
+          <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+            <span class="locality-badge">
+              <i class="fa-solid fa-location-dot"></i> ${v.localidad}
+            </span>
+            <span class="sheet-type-badge ${isPropuesta ? 'badge-propuesta' : 'badge-interinato'}">
+              <i class="fa-solid ${isPropuesta ? 'fa-bolt' : 'fa-clipboard-list'}"></i> ${isPropuesta ? 'Propuesta' : 'Interinato'}
+            </span>
+          </div>
           <span class="category-badge ${catBadgeClass}">
             ${v.matchedCategory || 'Otra Materia'}
           </span>
@@ -372,11 +403,13 @@ function updateStats() {
   const total = state.vacantes.length;
   let ingles = 0;
   let lengua = 0;
+  let propuestas = 0;
 
   state.vacantes.forEach(v => {
     const c = normalize(v.matchedCategory || '');
     if (c.includes('ingles')) ingles++;
     if (c.includes('lengua') || c.includes('literatura')) lengua++;
+    if (v.sheetType === 'Propuestas') propuestas++;
   });
 
   const otras = total - (ingles + lengua);
@@ -384,6 +417,8 @@ function updateStats() {
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statIngles').textContent = ingles;
   document.getElementById('statLengua').textContent = lengua;
+  const propEl = document.getElementById('statPropuestas');
+  if (propEl) propEl.textContent = propuestas;
   document.getElementById('statOtras').textContent = Math.max(0, otras);
 }
 
@@ -656,6 +691,14 @@ function setupEventListeners() {
   document.querySelectorAll('.stat-card').forEach(card => {
     card.addEventListener('click', () => {
       const filter = card.dataset.filter;
+      if (filter === 'propuestas') {
+        state.selectedSheetType = state.selectedSheetType === 'Propuestas' ? 'all' : 'Propuestas';
+        const select = document.getElementById('sheetTypeSelect');
+        if (select) select.value = state.selectedSheetType;
+        applyFilters();
+        showToast(state.selectedSheetType === 'Propuestas' ? 'Filtrando solo Propuestas' : 'Mostrando todas las convocatorias', 'info');
+        return;
+      }
       const targetPill = document.querySelector(`#subjectPills .pill-btn[data-subject="${filter}"]`);
       if (targetPill) {
         targetPill.click();
@@ -665,6 +708,24 @@ function setupEventListeners() {
       }
     });
   });
+
+  // Selector de Convocatoria (Propuestas vs Interinatos)
+  const sheetTypeSelect = document.getElementById('sheetTypeSelect');
+  if (sheetTypeSelect) {
+    sheetTypeSelect.addEventListener('change', (e) => {
+      state.selectedSheetType = e.target.value;
+      applyFilters();
+    });
+  }
+
+  // Selector de Carga Horaria
+  const hoursSelect = document.getElementById('hoursSelect');
+  if (hoursSelect) {
+    hoursSelect.addEventListener('change', (e) => {
+      state.selectedHours = e.target.value;
+      applyFilters();
+    });
+  }
 
   // Selector de Localidad
   document.getElementById('localitySelect').addEventListener('change', (e) => {
@@ -747,12 +808,16 @@ function setupEventListeners() {
     state.searchQuery = '';
     state.selectedLocality = 'all';
     state.selectedShift = 'all';
+    state.selectedSheetType = 'all';
+    state.selectedHours = 'all';
     state.activeSubjectFilter = 'priority';
 
     searchInput.value = '';
     btnClearSearch.classList.add('hidden');
     document.getElementById('localitySelect').value = 'all';
     document.getElementById('shiftSelect').value = 'all';
+    if (document.getElementById('sheetTypeSelect')) document.getElementById('sheetTypeSelect').value = 'all';
+    if (document.getElementById('hoursSelect')) document.getElementById('hoursSelect').value = 'all';
 
     const priorityPill = document.querySelector('#subjectPills .pill-btn[data-subject="priority"]');
     if (priorityPill) {

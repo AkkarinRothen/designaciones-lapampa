@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Designaciones Secundarias | La Pampa (Zona Centro)</title>
+  <meta name="description" content="Sistema de alertas y monitoreo en tiempo real de vacantes docentes en Educación Secundaria para Zona Centro (Santa Rosa, Toay, etc.), La Pampa.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark">
+  <div class="app-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-content container">
+        <div class="logo-area">
+          <div class="logo-icon-wrapper">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span class="live-dot" title="Monitoreo activo"></span>
+          </div>
+          <div>
+            <div class="brand-row">
+              <h1 class="logo-title">DesignaPampa <span>Secundaria</span></h1>
+              <span class="badge-tag">Zona Centro</span>
+            </div>
+            <p class="logo-subtitle">Alertas automáticas de vacantes para Inglés, Lengua y más</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <div class="status-indicator" id="statusIndicator">
+            <span class="status-pulse"></span>
+            <span class="status-text" id="statusText">Monitoreando</span>
+          </div>
+
+          <button id="btnScanNow" class="btn btn-primary" title="Actualizar datos oficiales">
+            <i class="fa-solid fa-rotate"></i>
+            <span class="btn-text">Escanear ahora</span>
+          </button>
+
+          <button id="btnTelegramSettings" class="btn btn-secondary" title="Configurar Telegram">
+            <i class="fa-brands fa-telegram"></i>
+            <span class="btn-text">Telegram</span>
+          </button>
+
+          <button id="btnSoundToggle" class="btn btn-icon" title="Sonido de alertas activado">
+            <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+          </button>
+
+          <button id="btnThemeToggle" class="btn btn-icon" title="Cambiar tema claro/oscuro">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container container">
+      <!-- Quick Stats / Highlights -->
+      <section class="stats-grid">
+        <div class="stat-card" data-filter="all">
+          <div class="stat-icon icon-blue"><i class="fa-solid fa-layer-group"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">Total Vacantes</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card-active" data-filter="ingles">
+          <div class="stat-icon icon-purple"><i class="fa-solid fa-language"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statIngles">0</span>
+            <span class="stat-label">Inglés</span>
+          </div>
+          <span class="stat-badge">Prioritario</span>
+        </div>
+
+        <div class="stat-card stat-card-active" data-filter="lengua">
+          <div class="stat-icon icon-emerald"><i class="fa-solid fa-book-open"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statLengua">0</span>
+            <span class="stat-label">Lengua y Literatura</span>
+          </div>
+          <span class="stat-badge">Prioritario</span>
+        </div>
+
+        <div class="stat-card" data-filter="otras">
+          <div class="stat-icon icon-amber"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statOtras">0</span>
+            <span class="stat-label">Otras Materias</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Controls Bar -->
+      <section class="controls-card">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Buscar por colegio, materia, curso, cupof..." autocomplete="off">
+          <button id="btnClearSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="filter-pills-row">
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-filter"></i> Materia:</span>
+            <div class="pills-container" id="subjectPills">
+              <button class="pill-btn active" data-subject="priority">Inglés y Lengua</button>
+              <button class="pill-btn" data-subject="ingles">Solo Inglés</button>
+              <button class="pill-btn" data-subject="lengua">Solo Lengua</button>
+              <button class="pill-btn" data-subject="all">Todas las materias</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-location-dot"></i> Localidad:</span>
+            <select id="localitySelect" class="form-select">
+              <option value="all">Todas las localidades de Zona Centro</option>
+              <optgroup label="Sede Santa Rosa">
+                <option value="Santa Rosa">Santa Rosa</option>
+                <option value="Toay">Toay</option>
+                <option value="Catriló">Catriló</option>
+                <option value="Anguil">Anguil</option>
+                <option value="Ataliva Roca">Ataliva Roca</option>
+                <option value="Uriburu">Uriburu</option>
+                <option value="Lonquimay">Lonquimay</option>
+              </optgroup>
+              <optgroup label="Otras Sedes de Zona Centro" id="otherSedesGroup">
+                <!-- Se llena dinámicamente -->
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label"><i class="fa-solid fa-calendar-day"></i> Turno:</span>
+            <select id="shiftSelect" class="form-select form-select-sm">
+              <option value="all">Todos los turnos</option>
+              <option value="M">Mañana</option>
+              <option value="T">Tarde</option>
+              <option value="V">Vespertino</option>
+              <option value="N">Noche</option>
+            </select>
+          </div>
+
+          <button id="btnManageKeywords" class="btn btn-outline btn-sm" title="Editar palabras clave">
+            <i class="fa-solid fa-tags"></i> Palabras Clave
+          </button>
+        </div>
+      </section>
+
+      <!-- Alert Banner when new vacancies are discovered -->
+      <div id="newVacanciesAlert" class="alert-banner hidden">
+        <div class="alert-banner-content">
+          <i class="fa-solid fa-bell alert-icon"></i>
+          <div>
+            <strong>¡Nuevas designaciones encontradas!</strong>
+            <span id="alertBannerText">Se detectaron vacantes para tus materias de interés.</span>
+          </div>
+        </div>
+        <button id="btnDismissAlert" class="btn-alert-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Vacancies Section Header -->
+      <section class="section-header">
+        <div class="section-title-wrap">
+          <h2 class="section-title" id="resultsTitle">Vacantes de Inglés y Lengua</h2>
+          <span class="results-badge" id="resultsCount">0 encontradas</span>
+        </div>
+        <div class="section-meta">
+          <span class="text-muted" id="lastUpdatedLabel"><i class="fa-regular fa-clock"></i> Última sincronización: cargando...</span>
+        </div>
+      </section>
+
+      <!-- Vacancies Grid List -->
+      <section id="vacanciesGrid" class="vacancies-grid">
+        <!-- Rendered by app.js -->
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Conectando con las planillas oficiales del Ministerio de Educación...</p>
+        </div>
+      </section>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
+        <h3>No se encontraron vacantes con los filtros seleccionados</h3>
+        <p>Prueba seleccionando "Todas las materias" o cambiando la localidad para ver publicaciones recientes.</p>
+        <button id="btnResetFilters" class="btn btn-secondary">Restablecer filtros</button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer container">
+      <div class="footer-row">
+        <div>
+          <p><strong>DesignaPampa Secundaria</strong> · Zona Centro La Pampa</p>
+          <p class="text-muted text-xs">Datos sincronizados con las planillas oficiales del Tribunal de Clasificación de Educación Secundaria.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://vozporvos.lapampa.edu.ar/" target="_blank" rel="noopener" class="footer-link">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Portal Voz por Vos
+          </a>
+          <a href="https://educacion.lapampa.edu.ar/docentes/designaciones/tribunal-de-clasificacion-de-educacion-secundaria" target="_blank" rel="noopener" class="footer-link">
+            <i class="fa-solid fa-landmark"></i> Web Ministerio La Pampa
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Telegram Modal -->
+  <div id="telegramModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-title">
+          <i class="fa-brands fa-telegram telegram-blue"></i>
+          <h3>Alertas automáticas por Telegram</h3>
+        </div>
+        <button class="modal-close" id="btnCloseTelegramModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-secondary">
+          Recibe avisos instantáneos en tu teléfono cuando se publiquen vacantes de <strong>Inglés</strong> o <strong>Lengua</strong>.
+        </p>
+
+        <div class="instructions-box">
+          <span class="instructions-title"><i class="fa-solid fa-circle-info"></i> Pasos para configurar tu bot gratis:</span>
+          <ol>
+            <li>Abre Telegram y busca <code>@BotFather</code>. Escribe <code>/newbot</code> y copia el <strong>Token</strong>.</li>
+            <li>Inicia tu bot creado enviándole cualquier mensaje (ej. <code>/start</code>).</li>
+            <li>Busca a <code>@userinfobot</code> en Telegram y copia tu <strong>Chat ID</strong> numérico.</li>
+          </ol>
+        </div>
+
+        <div class="form-group">
+          <label for="tgBotToken">Bot Token</label>
+          <input type="password" id="tgBotToken" class="form-input" placeholder="Ej: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ">
+        </div>
+
+        <div class="form-group">
+          <label for="tgChatId">Tu Chat ID</label>
+          <input type="text" id="tgChatId" class="form-input" placeholder="Ej: 987654321">
+        </div>
+
+        <div id="tgStatusMessage" class="status-msg hidden"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnTestTelegram" class="btn btn-secondary">
+          <i class="fa-solid fa-paper-plane"></i> Probar conexión
+        </button>
+        <button id="btnSaveTelegram" class="btn btn-primary">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar configuración
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keywords Modal -->
+  <div id="keywordsModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-title">
+          <i class="fa-solid fa-tags text-purple"></i>
+          <h3>Palabras clave y materias monitoreadas</h3>
+        </div>
+        <button class="modal-close" id="btnCloseKeywordsModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-secondary">
+          El sistema filtra automáticamente las planillas buscando coincidencias con estas materias y términos:
+        </p>
+
+        <div class="keywords-list" id="keywordsList">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="add-keyword-box">
+          <label class="text-xs font-semibold">Agregar nueva materia o término a monitorear:</label>
+          <div class="input-with-button">
+            <input type="text" id="newKeywordInput" class="form-input" placeholder="Ej: Historia, Geografía, Matemáticas...">
+            <button id="btnAddKeyword" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Agregar</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnResetKeywords" class="btn btn-secondary text-sm">Restaurar predeterminadas</button>
+        <button id="btnCloseKeywords" class="btn btn-primary">Listo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

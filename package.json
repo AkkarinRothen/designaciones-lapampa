@@ -1,0 +1,26 @@
+{
+  "name": "designaciones-secundaria-lapampa",
+  "version": "1.0.0",
+  "description": "Monitor de designaciones docentes de Educación Secundaria - Zona Centro La Pampa con alertas para Inglés y Lengua",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "monitor": "node scraper.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "designaciones",
+    "docentes",
+    "la-pampa",
+    "educacion",
+    "secundaria",
+    "telegram-bot"
+  ],
+  "author": "AkkarinRothen",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "node-cron": "^3.0.3"
+  }
+}

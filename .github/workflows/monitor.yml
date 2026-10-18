@@ -1,0 +1,39 @@
+name: Monitor de Designaciones Secundarias (La Pampa)
+
+on:
+  schedule:
+    # Lunes a viernes cada 20 minutos entre las 07:00 y las 19:00 hora de Argentina (10:00 a 22:00 UTC)
+    - cron: '*/20 10-22 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci || npm install
+
+      - name: Ejecutar escaneo y envío de alertas Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scraper.js
+
+      - name: Hacer commit y push de las últimas vacantes si hubo cambios
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: sincronizar últimas vacantes detectadas [skip ci]" && git push)

@@ -74,6 +74,62 @@ body.theme-light {
   --shadow-card-hover: 0 20px 35px -8px rgba(99, 102, 241, 0.15);
 }
 
+/* Tema Midnight OLED (Negro Absoluto y Zafiro) */
+body.theme-oled {
+  --bg-primary: #000000;
+  --bg-secondary: #050811;
+  --bg-surface: rgba(10, 15, 28, 0.88);
+  --bg-surface-elevated: #0e1424;
+  --bg-glass: rgba(0, 0, 0, 0.88);
+
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-focus: var(--accent-indigo);
+  --border-glow: rgba(99, 102, 241, 0.35);
+
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-inverse: #000000;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.9);
+  --shadow-lg: 0 10px 35px -5px rgba(0, 0, 0, 0.95);
+  --shadow-card-hover: 0 20px 40px -8px rgba(0, 0, 0, 1), 0 0 20px -2px var(--accent-indigo);
+}
+
+/* Acentos Dinámicos de Color Personalizables */
+body[data-accent="emerald"] {
+  --accent-indigo: #10b981;
+  --accent-indigo-hover: #059669;
+  --border-focus: rgba(16, 185, 129, 0.6);
+  --border-glow: rgba(16, 185, 129, 0.25);
+  --grad-primary: linear-gradient(135deg, #10b981 0%, #059669 50%, #06b6d4 100%);
+}
+
+body[data-accent="cyan"] {
+  --accent-indigo: #06b6d4;
+  --accent-indigo-hover: #0891b2;
+  --border-focus: rgba(6, 182, 212, 0.6);
+  --border-glow: rgba(6, 182, 212, 0.25);
+  --grad-primary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+}
+
+body[data-accent="rose"] {
+  --accent-indigo: #f43f5e;
+  --accent-indigo-hover: #e11d48;
+  --border-focus: rgba(244, 63, 94, 0.6);
+  --border-glow: rgba(244, 63, 94, 0.25);
+  --grad-primary: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #a855f7 100%);
+}
+
+body[data-accent="amber"] {
+  --accent-indigo: #f59e0b;
+  --accent-indigo-hover: #d97706;
+  --border-focus: rgba(245, 158, 11, 0.6);
+  --border-glow: rgba(245, 158, 11, 0.25);
+  --grad-primary: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+}
+
 /* Reset y Base */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -2104,5 +2160,208 @@ body.theme-light .tippy-box[data-theme~="designapampa"] .tippy-arrow {
   .chart-canvas-wrapper {
     height: 190px;
   }
+}
+
+/* ==========================================================================
+   SELECTOR DE TEMAS & APARIENCIA (POPOVER DROPDOWN)
+   ========================================================================== */
+.theme-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 290px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 20px -5px var(--accent-indigo);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: fadeInPopover 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInPopover {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.65rem;
+}
+
+.popover-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-popover-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem;
+  transition: color 0.2s ease;
+}
+
+.btn-popover-close:hover {
+  color: var(--text-primary);
+}
+
+.popover-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popover-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.theme-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+}
+
+.theme-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.theme-opt-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--accent-indigo);
+  transform: translateX(2px);
+}
+
+.theme-opt-btn.active {
+  border-color: var(--accent-indigo);
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 12px -2px var(--accent-indigo);
+}
+
+.theme-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.swatch-oled {
+  background: #000000;
+  box-shadow: inset 0 0 4px #6366f1;
+}
+
+.swatch-navy {
+  background: #111827;
+}
+
+.swatch-light {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Fila de colores de acento */
+.accent-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.35rem 0.2rem;
+}
+
+.accent-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--btn-accent);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  outline: none;
+}
+
+.accent-btn:hover {
+  transform: scale(1.18);
+}
+
+.accent-btn.active {
+  transform: scale(1.15);
+  border-color: #ffffff;
+  box-shadow: 0 0 14px var(--btn-accent);
+}
+
+body.theme-light .accent-btn.active {
+  border-color: #0f172a;
+}
+
+/* ==========================================================================
+   TIPOGRAFÍA EDITORIAL REFINADA & DETALLES VISUALES
+   ========================================================================== */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.logo-title {
+  letter-spacing: -0.03em;
+}
+
+.section-title {
+  letter-spacing: -0.025em;
+}
+
+.materia-title {
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.stat-value {
+  letter-spacing: -0.03em;
+}
+
+.badge-tag,
+.stat-badge,
+.category-badge,
+.locality-badge,
+.sheet-type-badge {
+  letter-spacing: 0.04em;
 }
 

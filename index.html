@@ -64,9 +64,48 @@
             <i class="fa-solid fa-volume-high" id="soundIcon"></i>
           </button>
 
-          <button id="btnThemeToggle" class="btn btn-icon" title="Cambiar tema claro/oscuro">
-            <i class="fa-solid fa-moon" id="themeIcon"></i>
-          </button>
+          <div class="theme-dropdown-wrapper">
+            <button id="btnThemeDropdown" class="btn btn-icon" title="Personalizar apariencia y colores" aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-palette" id="themePaletteIcon"></i>
+            </button>
+
+            <!-- Theme & Appearance Popover -->
+            <div id="themePopover" class="theme-popover hidden">
+              <div class="popover-header">
+                <span class="popover-title"><i class="fa-solid fa-swatchbook text-cyan"></i> Apariencia</span>
+                <button id="btnCloseThemePopover" class="btn-popover-close"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <div class="popover-section">
+                <span class="popover-label">Tema Base</span>
+                <div class="theme-options-grid">
+                  <button type="button" class="theme-opt-btn" data-base-theme="oled" title="Negro absoluto y máximo contraste">
+                    <span class="theme-swatch swatch-oled"></span>
+                    <span>Midnight OLED</span>
+                  </button>
+                  <button type="button" class="theme-opt-btn active" data-base-theme="dark" title="Azul marino tecnológico">
+                    <span class="theme-swatch swatch-navy"></span>
+                    <span>Deep Navy</span>
+                  </button>
+                  <button type="button" class="theme-opt-btn" data-base-theme="light" title="Modo claro editorial limpio">
+                    <span class="theme-swatch swatch-light"></span>
+                    <span>Editorial Light</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="popover-section">
+                <span class="popover-label">Color de Acento</span>
+                <div class="accent-options-row">
+                  <button type="button" class="accent-btn active" data-accent="indigo" style="--btn-accent: #6366f1;" title="Violeta Pampa (Predeterminado)"></button>
+                  <button type="button" class="accent-btn" data-accent="emerald" style="--btn-accent: #10b981;" title="Verde Esmeralda"></button>
+                  <button type="button" class="accent-btn" data-accent="cyan" style="--btn-accent: #06b6d4;" title="Cian Eléctrico"></button>
+                  <button type="button" class="accent-btn" data-accent="rose" style="--btn-accent: #f43f5e;" title="Rosa Magenta"></button>
+                  <button type="button" class="accent-btn" data-accent="amber" style="--btn-accent: #f59e0b;" title="Ámbar Dorado"></button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

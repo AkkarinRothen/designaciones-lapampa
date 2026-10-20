@@ -1435,6 +1435,113 @@ function setupKeywordsModal() {
 }
 
 // ==========================================================================
+// Sistema Avanzado de Temas y Acentos de Color
+// ==========================================================================
+function setupThemeSystem() {
+  const btnDropdown = document.getElementById('btnThemeDropdown');
+  const popover = document.getElementById('themePopover');
+  const btnClose = document.getElementById('btnCloseThemePopover');
+
+  const savedBaseTheme = localStorage.getItem('designapampa_base_theme') || localStorage.getItem('designapampa_theme') || 'dark';
+  const savedAccent = localStorage.getItem('designapampa_accent') || 'indigo';
+
+  function applyBaseTheme(theme) {
+    document.body.classList.remove('theme-dark', 'theme-light', 'theme-oled');
+    if (theme === 'light') {
+      document.body.classList.add('theme-light');
+    } else if (theme === 'oled') {
+      document.body.classList.add('theme-oled');
+    } else {
+      document.body.classList.add('theme-dark');
+    }
+    localStorage.setItem('designapampa_base_theme', theme);
+    localStorage.setItem('designapampa_theme', theme);
+
+    document.querySelectorAll('.theme-opt-btn').forEach(btn => {
+      if (btn.getAttribute('data-base-theme') === theme) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    if (state.analyticsOpen) {
+      updateCharts();
+    }
+  }
+
+  function applyAccent(accent) {
+    document.body.setAttribute('data-accent', accent);
+    localStorage.setItem('designapampa_accent', accent);
+
+    document.querySelectorAll('.accent-btn').forEach(btn => {
+      if (btn.getAttribute('data-accent') === accent) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    if (state.analyticsOpen) {
+      updateCharts();
+    }
+  }
+
+  // Inicializar estado guardado
+  applyBaseTheme(savedBaseTheme);
+  applyAccent(savedAccent);
+
+  // Toggle Popover
+  if (btnDropdown && popover) {
+    btnDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = popover.classList.contains('hidden');
+      if (isHidden) {
+        popover.classList.remove('hidden');
+        btnDropdown.setAttribute('aria-expanded', 'true');
+      } else {
+        popover.classList.add('hidden');
+        btnDropdown.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  if (btnClose && popover) {
+    btnClose.addEventListener('click', () => {
+      popover.classList.add('hidden');
+      if (btnDropdown) btnDropdown.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (popover && !popover.classList.contains('hidden')) {
+      if (!popover.contains(e.target) && (!btnDropdown || !btnDropdown.contains(e.target))) {
+        popover.classList.add('hidden');
+        if (btnDropdown) btnDropdown.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // Opciones de tema base
+  document.querySelectorAll('.theme-opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.getAttribute('data-base-theme');
+      applyBaseTheme(theme);
+      showToast(`Tema ${btn.querySelector('span:last-child').textContent} aplicado`, 'info');
+    });
+  });
+
+  // Opciones de color de acento
+  document.querySelectorAll('.accent-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const accent = btn.getAttribute('data-accent');
+      applyAccent(accent);
+      showToast('Color de acento actualizado', 'success');
+    });
+  });
+}
+
+// ==========================================================================
 // Event Listeners y Controles
 // ==========================================================================
 function setupEventListeners() {
@@ -1750,29 +1857,8 @@ function setupEventListeners() {
   const btnPdf = document.getElementById('btnExportPdf');
   if (btnPdf) btnPdf.addEventListener('click', exportToPdf);
 
-  // Tema Claro / Oscuro Toggle
-  const btnTheme = document.getElementById('btnThemeToggle');
-  const themeIcon = document.getElementById('themeIcon');
-  const savedTheme = localStorage.getItem('designapampa_theme') || 'dark';
-  if (savedTheme === 'light') {
-    document.body.className = 'theme-light';
-    themeIcon.className = 'fa-solid fa-sun';
-  }
-
-  btnTheme.addEventListener('click', () => {
-    if (document.body.classList.contains('theme-dark')) {
-      document.body.className = 'theme-light';
-      themeIcon.className = 'fa-solid fa-sun';
-      localStorage.setItem('designapampa_theme', 'light');
-    } else {
-      document.body.className = 'theme-dark';
-      themeIcon.className = 'fa-solid fa-moon';
-      localStorage.setItem('designapampa_theme', 'dark');
-    }
-    if (state.analyticsOpen) {
-      updateCharts();
-    }
-  });
+  // Sistema Avanzado de Temas y Acentos de Color
+  setupThemeSystem();
 
   // Restablecer Filtros de Secundaria
   document.getElementById('btnResetFilters').addEventListener('click', () => {

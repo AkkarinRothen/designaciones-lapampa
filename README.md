@@ -30,7 +30,7 @@
 - 🔔 **Alertas en la Web:** Notificaciones visuales emergentes y timbre sonoro sintetizado (Web Audio API).
 - 🚀 **Acceso Rápido Oficial:** Botones de acceso directo en cada vacante para postularse en [Voz por Vos](https://vozporvos.lapampa.edu.ar/), planillas originales y páginas de inscripción de cursos.
 - 📤 **Compartir y Copiar:** Copia al portapapeles o comparte directamente en grupos de WhatsApp de colegas docentes.
-- 🌓 **Diseño Moderno:** Interfaz ultra-rápida, responsive (móvil y escritorio) con modo oscuro y modo claro.
+- 🎨 **Sistema de Apariencia Avanzado:** Menú emergente de personalización en vivo con 3 temas base (**Midnight OLED** para pantallas de alto contraste, **Deep Navy** tecnológico y **Editorial Light** nítido) y 5 colores de acento dinámicos (*Violeta Pampa*, *Verde Esmeralda*, *Cian Eléctrico*, *Rosa Magenta* y *Ámbar Dorado*).
 
 ---
 

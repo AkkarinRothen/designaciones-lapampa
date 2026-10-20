@@ -14,6 +14,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
+  <!-- Tippy Tooltips CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-dark">
@@ -134,12 +137,88 @@
           </div>
         </section>
 
-        <!-- Filter Controls Bar -->
-        <section class="controls-card">
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Buscar por colegio, materia, curso, cupof..." autocomplete="off">
-            <button id="btnClearSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
+        <!-- Collapsible Analytics Dashboard (Chart.js) -->
+        <section id="analyticsPanel" class="analytics-panel hidden" aria-label="Analítica de Vacantes">
+          <div class="analytics-header">
+            <div class="analytics-title-group">
+              <div class="analytics-badge-icon"><i class="fa-solid fa-chart-pie"></i></div>
+              <div>
+                <h3 class="analytics-title">Analítica y Distribución de Vacantes</h3>
+                <p class="analytics-subtitle">Estadísticas en tiempo real según los filtros activos</p>
+              </div>
+            </div>
+            <button id="btnCloseAnalytics" class="btn btn-outline btn-sm" title="Ocultar panel de analítica">
+              <i class="fa-solid fa-xmark"></i> Ocultar
+            </button>
+          </div>
+          <div class="analytics-grid">
+            <div class="chart-card">
+              <div class="chart-header">
+                <h4><i class="fa-solid fa-chart-pie text-purple"></i> Por Materia</h4>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartMaterias"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <h4><i class="fa-solid fa-chart-column text-emerald"></i> Top Localidades</h4>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartLocalidades"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <h4><i class="fa-solid fa-clock text-amber"></i> Carga Horaria y Turnos</h4>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartTurnos"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filter Controls Bar (Sticky Glassmorphism) -->
+        <section class="controls-card sticky-controls-bar" id="stickyControlsBar">
+          <div class="controls-top-row">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="searchInput" placeholder="Búsqueda inteligente: colegio, materia, curso, cupof..." autocomplete="off">
+              <button id="btnClearSearch" class="btn-clear hidden" title="Limpiar búsqueda"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="controls-toolbar">
+              <!-- View Mode Switcher -->
+              <div class="view-mode-toggle" role="group" aria-label="Modo de vista">
+                <button id="btnViewCards" class="btn-toggle active" type="button" title="Vista de tarjetas detalladas">
+                  <i class="fa-solid fa-grip"></i>
+                  <span class="btn-label">Tarjetas</span>
+                </button>
+                <button id="btnViewTable" class="btn-toggle" type="button" title="Vista de tabla interactiva compacta">
+                  <i class="fa-solid fa-table-list"></i>
+                  <span class="btn-label">Tabla</span>
+                </button>
+              </div>
+
+              <!-- Analytics Toggle -->
+              <button id="btnToggleAnalytics" class="btn btn-outline btn-sm" type="button" title="Ver analítica y gráficos">
+                <i class="fa-solid fa-chart-pie text-cyan"></i>
+                <span class="btn-label">Gráficos</span>
+              </button>
+
+              <!-- Export Actions -->
+              <div class="export-actions">
+                <button id="btnExportExcel" class="btn btn-outline btn-sm" type="button" title="Descargar vacantes filtradas en Excel (.xlsx)">
+                  <i class="fa-solid fa-file-excel text-emerald"></i>
+                  <span class="btn-label">Excel</span>
+                </button>
+                <button id="btnExportPdf" class="btn btn-outline btn-sm" type="button" title="Exportar reporte oficial en PDF">
+                  <i class="fa-solid fa-file-pdf text-rose"></i>
+                  <span class="btn-label">PDF</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="filter-pills-row">
@@ -235,12 +314,48 @@
           </div>
         </section>
 
-        <!-- Vacancies Grid List -->
+        <!-- Vacancies Grid List (Cards View) -->
         <section id="vacanciesGrid" class="vacancies-grid">
           <!-- Rendered by app.js -->
           <div class="loading-state">
             <div class="spinner"></div>
             <p>Conectando con las planillas oficiales del Ministerio de Educación...</p>
+          </div>
+        </section>
+
+        <!-- Vacancies Table View (Compact Interactive View) -->
+        <section id="vacanciesTableWrapper" class="vacancies-table-wrapper hidden">
+          <div class="table-scroll-container">
+            <table id="vacanciesTable" class="vacancies-table">
+              <thead>
+                <tr>
+                  <th class="th-sortable" data-sort="sheetType" title="Ordenar por Tipo de Convocatoria">
+                    <span>Tipo</span> <i class="fa-solid fa-sort sort-icon"></i>
+                  </th>
+                  <th class="th-sortable" data-sort="materia" title="Ordenar por Materia">
+                    <span>Materia y Carácter</span> <i class="fa-solid fa-sort sort-icon"></i>
+                  </th>
+                  <th class="th-sortable" data-sort="colegio" title="Ordenar por Colegio">
+                    <span>Colegio / Localidad</span> <i class="fa-solid fa-sort sort-icon"></i>
+                  </th>
+                  <th class="th-sortable text-center" data-sort="horas" title="Ordenar por Horas">
+                    <span>Hs / Curso</span> <i class="fa-solid fa-sort sort-icon"></i>
+                  </th>
+                  <th class="th-sortable text-center" data-sort="turno" title="Ordenar por Turno">
+                    <span>Turno</span> <i class="fa-solid fa-sort sort-icon"></i>
+                  </th>
+                  <th>
+                    <span>Horarios de Clase</span>
+                  </th>
+                  <th class="text-right">
+                    <span>Acciones</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="vacanciesTableBody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
           </div>
         </section>
 
@@ -485,6 +600,29 @@
 
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Librerías Externas -->
+  <!-- Dayjs (Fechas relativas y formateo elegante) -->
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/es.js"></script>
+  
+  <!-- Fuse.js (Búsqueda difusa tolerante a errores tipográficos) -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.basic.min.js"></script>
+  
+  <!-- Chart.js (Panel de gráficos interactivos) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  
+  <!-- SheetJS (Exportación a Excel .xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- jsPDF & autotable (Reportes oficiales en PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  
+  <!-- Popper & Tippy.js (Tooltips interactivos) -->
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
 
   <script src="app.js"></script>
 </body>

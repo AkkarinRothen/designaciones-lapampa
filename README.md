@@ -15,6 +15,13 @@
   - **Inglés** (ej: *Lengua Extranjera: Inglés*, *Inglés*).
   - **Lengua** (ej: *Lengua y Literatura*, *Literatura*, *Prácticas del Lenguaje*).
   - Panel visual interactivo para agregar o editar materias y palabras clave adicionales bajo demanda.
+- 📊 **Visualización Dual (Tarjetas vs Tabla Compacta):** Conmuta al instante entre vista de tarjetas detalladas y una tabla interactiva de alta densidad con ordenamiento por columnas (Horas, Materia, Colegio, Turno, etc.).
+- 📌 **Barra de Herramientas Sticky Glassmorphism:** Filtros y buscador inteligente fijados en la parte superior con efecto de desenfoque translúcido que acompaña el scroll sin invadir la pantalla.
+- 📈 **Panel de Analítica y Gráficos (Chart.js):** Métricas y gráficos interactivos colapsables de distribución de vacantes por materia (Doughnut), top localidades (Barras) y turnos/carga horaria.
+- 🔎 **Búsqueda Inteligente Difusa (Fuse.js):** Algoritmo de búsqueda tolerante a errores tipográficos, tildes y variaciones de texto en colegios, materias y CUPOFs.
+- 📥 **Exportación Profesional (SheetJS & jsPDF):** Descarga con un solo clic de las vacantes filtradas en formato Excel (.xlsx) limpio o en PDF oficial listo para imprimir.
+- 💬 **Tooltips Avanzados (Tippy.js):** Previsualizaciones elegantes al pasar el mouse por horarios, CUPOFs y notas.
+- 🕒 **Tiempos Relativos Inteligentes (Dayjs):** Monitoreo con marcas temporales en tiempo real ("hace 3 minutos", "actualizado hoy").
 - 📚 **Catálogo de Cursos y Capacitaciones RedPam:** Integración directa con el portal [RedPam](https://redpam.lapampa.edu.ar/propuestas).
   - Pestañas superiores para alternar entre *Designaciones Secundarias* y *Cursos RedPam*.
   - Filtros por temática (Inglés, Lengua, ESI, Inclusión), nivel educativo (Secundario, Primario, Inicial, Superior), modalidad (Virtual, Presencial) y costo (Gratuito vs Arancelado).

@@ -19,6 +19,17 @@ const state = {
   lastUpdated: null,
   seenIds: new Set(),
   activeTab: 'designaciones', // 'designaciones' | 'redpam'
+  viewMode: localStorage.getItem('designapampa_view_mode') || 'cards', // 'cards' | 'table'
+  tableSort: {
+    column: 'horas',
+    direction: 'desc'
+  },
+  analyticsOpen: false,
+  charts: {
+    materias: null,
+    localidades: null,
+    turnos: null
+  },
   redpamCourses: [],
   filteredRedpamCourses: [],
   redpamFilters: {
@@ -33,6 +44,18 @@ const state = {
     { id: 'lengua', label: 'Lengua y Literatura', patterns: ['lengua', 'lengua y literatura', 'literatura', 'practicas del lenguaje', 'prácticas del lenguaje'] }
   ]
 };
+
+// Inicialización de Dayjs en español si está disponible
+if (typeof dayjs !== 'undefined') {
+  try {
+    dayjs.locale('es');
+    if (window.dayjs_plugin_relativeTime) {
+      dayjs.extend(window.dayjs_plugin_relativeTime);
+    }
+  } catch (e) {
+    console.warn('Dayjs plugin config:', e);
+  }
+}
 
 // ==========================================================================
 // Sintetizador de Sonido de Notificación (Web Audio API)
@@ -231,6 +254,29 @@ async function scanLiveFromClient() {
 // ==========================================================================
 function applyFilters() {
   const query = normalize(state.searchQuery);
+  let fuzzyIdSet = null;
+
+  // Búsqueda inteligente difusa con Fuse.js si está disponible
+  if (query && window.Fuse && state.vacantes.length > 0) {
+    try {
+      const fuse = new window.Fuse(state.vacantes, {
+        keys: [
+          { name: 'materia', weight: 0.35 },
+          { name: 'colegio', weight: 0.25 },
+          { name: 'localidad', weight: 0.15 },
+          { name: 'curso', weight: 0.1 },
+          { name: 'division', weight: 0.05 },
+          { name: 'cupof', weight: 0.1 }
+        ],
+        threshold: 0.38,
+        ignoreLocation: true
+      });
+      const results = fuse.search(query);
+      fuzzyIdSet = new Set(results.map(r => r.item.id));
+    } catch (e) {
+      console.warn('Fuse search fallback:', e);
+    }
+  }
 
   state.filteredVacantes = state.vacantes.filter(v => {
     // 1. Filtro de Materia
@@ -271,10 +317,14 @@ function applyFilters() {
       if ((v.turno || '').toUpperCase() !== state.selectedShift) return false;
     }
 
-    // 6. Búsqueda de texto libre
+    // 6. Búsqueda de texto libre (Fuzzy con Fuse o fallback substring)
     if (query) {
-      const searchBlob = normalize(`${v.colegio} ${v.materia} ${v.localidad} ${v.curso} ${v.division} ${v.motivo} ${v.revista} ${v.cupof}`);
-      if (!searchBlob.includes(query)) return false;
+      if (fuzzyIdSet) {
+        if (!fuzzyIdSet.has(v.id)) return false;
+      } else {
+        const searchBlob = normalize(`${v.colegio} ${v.materia} ${v.localidad} ${v.curso} ${v.division} ${v.motivo} ${v.revista} ${v.cupof}`);
+        if (!searchBlob.includes(query)) return false;
+      }
     }
 
     return true;
@@ -282,20 +332,43 @@ function applyFilters() {
 
   renderVacancies();
   updateResultsCountUI();
+  if (state.analyticsOpen) {
+    updateCharts();
+  }
 }
 
 function renderVacancies() {
   const grid = document.getElementById('vacanciesGrid');
+  const tableWrapper = document.getElementById('vacanciesTableWrapper');
   const emptyState = document.getElementById('emptyState');
-  if (!grid) return;
+  if (!grid || !tableWrapper) return;
 
   if (state.filteredVacantes.length === 0) {
     grid.innerHTML = '';
+    const tableBody = document.getElementById('vacanciesTableBody');
+    if (tableBody) tableBody.innerHTML = '';
     emptyState.classList.remove('hidden');
     return;
   }
 
   emptyState.classList.add('hidden');
+
+  if (state.viewMode === 'table') {
+    grid.classList.add('hidden');
+    tableWrapper.classList.remove('hidden');
+    renderVacanciesTable();
+  } else {
+    tableWrapper.classList.add('hidden');
+    grid.classList.remove('hidden');
+    renderVacanciesCards();
+  }
+
+  setupTooltips();
+}
+
+function renderVacanciesCards() {
+  const grid = document.getElementById('vacanciesGrid');
+  if (!grid) return;
 
   grid.innerHTML = state.filteredVacantes.map(v => {
     const isPriority = v.matchedCategory !== null;
@@ -334,10 +407,10 @@ function renderVacancies() {
       <article class="${cardClass}" id="card-${v.id}">
         <div class="card-top">
           <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
-            <span class="locality-badge">
+            <span class="locality-badge" data-tippy-content="Localidad: ${v.localidad}">
               <i class="fa-solid fa-location-dot"></i> ${v.localidad}
             </span>
-            <span class="sheet-type-badge ${isPropuesta ? 'badge-propuesta' : 'badge-interinato'}">
+            <span class="sheet-type-badge ${isPropuesta ? 'badge-propuesta' : 'badge-interinato'}" data-tippy-content="${isPropuesta ? 'Convocatoria por Propuesta abierta' : 'Publicación de Interinatos y Suplencias'}">
               <i class="fa-solid ${isPropuesta ? 'fa-bolt' : 'fa-clipboard-list'}"></i> ${isPropuesta ? 'Propuesta' : 'Interinato'}
             </span>
           </div>
@@ -347,7 +420,7 @@ function renderVacancies() {
         </div>
 
         <h3 class="materia-title">${v.materia}</h3>
-        <p class="colegio-name">
+        <p class="colegio-name" data-tippy-content="CUPOF: ${v.cupof || 'S/D'}">
           <i class="fa-solid fa-school"></i> ${v.colegio}
         </p>
 
@@ -370,27 +443,27 @@ function renderVacancies() {
           </div>
         </div>
 
-        <div class="schedule-box">
+        <div class="schedule-box" data-tippy-content="${v.horarios ? `Horarios detallados: ${v.horarios}` : 'Sin horarios especificados'}">
           <div class="schedule-label">
             <i class="fa-regular fa-calendar-check"></i> Horarios:
           </div>
-          <div>${v.horarios}</div>
+          <div>${v.horarios || 'Ver en planilla oficial'}</div>
         </div>
 
         <div class="card-actions">
           <div class="card-actions-primary">
-            <a href="${v.linkVozPorVos}" target="_blank" rel="noopener" class="btn-voz">
+            <a href="${v.linkVozPorVos}" target="_blank" rel="noopener" class="btn-voz" data-tippy-content="Abrir portal Voz por Vos para postularte">
               <i class="fa-solid fa-arrow-up-right-from-square"></i> Voz por Vos
             </a>
-            <a href="${v.linkSheet}" target="_blank" rel="noopener" class="btn-sheet" title="Ver Hoja de Cálculo Oficial">
+            <a href="${v.linkSheet}" target="_blank" rel="noopener" class="btn-sheet" data-tippy-content="Ver hoja de cálculo oficial de la sede" title="Ver Hoja de Cálculo Oficial">
               <i class="fa-solid fa-table"></i> Planilla
             </a>
           </div>
           <div class="card-actions-secondary">
-            <button class="action-link" onclick="copyVacancyText('${encodeURIComponent(copyText)}')">
-              <i class="fa-regular fa-copy"></i> Copiar detalle
+            <button class="action-link" onclick="copyVacancyText('${encodeURIComponent(copyText)}')" data-tippy-content="Copiar ficha lista para pegar">
+              <i class="fa-regular fa-copy"></i> Copiar
             </button>
-            <a href="https://api.whatsapp.com/send?text=${waText}" target="_blank" rel="noopener" class="action-link" title="Compartir en WhatsApp">
+            <a href="https://api.whatsapp.com/send?text=${waText}" target="_blank" rel="noopener" class="action-link" data-tippy-content="Compartir por WhatsApp con colegas" title="Compartir en WhatsApp">
               <i class="fa-brands fa-whatsapp"></i> Compartir
             </a>
           </div>
@@ -398,6 +471,369 @@ function renderVacancies() {
       </article>
     `;
   }).join('');
+}
+
+function renderVacanciesTable() {
+  const tableBody = document.getElementById('vacanciesTableBody');
+  if (!tableBody) return;
+
+  // Ordenar copia según estado tableSort
+  const sorted = [...state.filteredVacantes].sort((a, b) => {
+    const col = state.tableSort.column;
+    const dir = state.tableSort.direction === 'asc' ? 1 : -1;
+
+    if (col === 'horas') {
+      const hA = parseInt(a.horas, 10) || 0;
+      const hB = parseInt(b.horas, 10) || 0;
+      return (hA - hB) * dir;
+    }
+    if (col === 'materia') {
+      return (a.materia || '').localeCompare(b.materia || '', 'es') * dir;
+    }
+    if (col === 'colegio') {
+      return (a.colegio || '').localeCompare(b.colegio || '', 'es') * dir;
+    }
+    if (col === 'sheetType') {
+      return (a.sheetType || '').localeCompare(b.sheetType || '', 'es') * dir;
+    }
+    if (col === 'turno') {
+      return (a.turno || '').localeCompare(b.turno || '', 'es') * dir;
+    }
+    return 0;
+  });
+
+  // Actualizar indicadores de orden en los encabezados
+  document.querySelectorAll('#vacanciesTable th.th-sortable').forEach(th => {
+    const col = th.getAttribute('data-sort');
+    th.classList.remove('th-sorted-asc', 'th-sorted-desc');
+    if (col === state.tableSort.column) {
+      th.classList.add(state.tableSort.direction === 'asc' ? 'th-sorted-asc' : 'th-sorted-desc');
+    }
+  });
+
+  const turnoMap = { 'M': 'Mañana', 'T': 'Tarde', 'V': 'Vespertino', 'N': 'Noche' };
+
+  tableBody.innerHTML = sorted.map(v => {
+    const isPropuesta = v.sheetType === 'Propuestas';
+    const catNorm = normalize(v.matchedCategory || '');
+    let rowClass = '';
+    if (catNorm.includes('ingles')) rowClass = 'row-priority-ingles';
+    else if (catNorm.includes('lengua') || catNorm.includes('literatura')) rowClass = 'row-priority-lengua';
+    if (isPropuesta) rowClass += ' row-propuesta';
+
+    const turnoName = turnoMap[(v.turno || '').toUpperCase()] || v.turno || 'A def.';
+
+    const copyText = `📚 *Vacante en Secundaria*: ${v.materia}
+📌 *Convocatoria*: ${isPropuesta ? '⚡ PROPUESTA' : '📋 Interinatos y Suplencias'}
+🏫 ${v.colegio} - ${v.localidad}
+⏱️ ${v.horas} Horas | Curso: ${v.curso} "${v.division}" | Turno: ${turnoName}
+📋 ${v.revista} (${v.motivo})
+📅 Fecha de designación: ${v.fechaDesignacion}
+⏰ Horarios: ${v.horarios}
+🔗 Voz por Vos: https://vozporvos.lapampa.edu.ar/`;
+
+    const waText = encodeURIComponent(copyText);
+
+    return `
+      <tr class="${rowClass}">
+        <td>
+          <span class="sheet-type-badge ${isPropuesta ? 'badge-propuesta' : 'badge-interinato'}" data-tippy-content="${isPropuesta ? 'Convocatoria por Propuesta' : 'Interinatos y Suplencias'}">
+            <i class="fa-solid ${isPropuesta ? 'fa-bolt' : 'fa-clipboard-list'}"></i>
+            ${isPropuesta ? 'Propuesta' : 'Interinato'}
+          </span>
+        </td>
+        <td>
+          <span class="tbl-materia-title">${v.materia}</span>
+          <span class="tbl-materia-meta">
+            <span class="badge-tag" style="font-size: 0.68rem; padding: 0.1rem 0.4rem;">${v.matchedCategory || 'Otra'}</span>
+            <span>· ${v.revista} (${v.motivo})</span>
+          </span>
+        </td>
+        <td>
+          <span class="tbl-school-title" data-tippy-content="CUPOF: ${v.cupof || 'S/D'}">${v.colegio}</span>
+          <span class="tbl-locality-tag">
+            <i class="fa-solid fa-location-dot"></i> ${v.localidad}
+          </span>
+        </td>
+        <td class="text-center">
+          <span class="tbl-hours-pill">${v.horas} hs</span>
+          <span class="tbl-course-sub">${v.curso} "${v.division}"</span>
+        </td>
+        <td class="text-center">
+          <span class="badge-tag" style="font-size:0.75rem;" data-tippy-content="Turno ${turnoName}">${turnoName}</span>
+        </td>
+        <td>
+          <span class="tbl-schedule-snippet" data-tippy-content="<strong>Horarios detallados:</strong><br>${v.horarios || 'No especificados en la planilla'}">
+            <i class="fa-regular fa-clock"></i> ${v.horarios || 'Ver en planilla'}
+          </span>
+        </td>
+        <td>
+          <div class="tbl-actions-cell">
+            <a href="${v.linkVozPorVos}" target="_blank" rel="noopener" class="tbl-action-btn btn-tbl-voz" data-tippy-content="Postularse en Voz por Vos">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Voz por Vos
+            </a>
+            <a href="${v.linkSheet}" target="_blank" rel="noopener" class="tbl-action-btn" data-tippy-content="Ver hoja oficial de cálculo">
+              <i class="fa-solid fa-table"></i>
+            </a>
+            <button type="button" class="tbl-action-btn" onclick="copyVacancyText('${encodeURIComponent(copyText)}')" data-tippy-content="Copiar ficha">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+            <a href="https://api.whatsapp.com/send?text=${waText}" target="_blank" rel="noopener" class="tbl-action-btn" data-tippy-content="Compartir por WhatsApp">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Inicialización de Tooltips Tippy.js
+function setupTooltips() {
+  if (typeof window.tippy !== 'undefined') {
+    try {
+      window.tippy('[data-tippy-content]', {
+        animation: 'scale',
+        theme: 'designapampa',
+        allowHTML: true,
+        delay: [100, 50]
+      });
+    } catch (e) {
+      console.warn('Tippy error:', e);
+    }
+  }
+}
+
+// ==========================================================================
+// Módulo de Analítica Visual Interactiva (Chart.js)
+// ==========================================================================
+function updateCharts() {
+  if (typeof window.Chart === 'undefined') return;
+
+  const vacantes = state.filteredVacantes;
+  const isLight = document.body.classList.contains('theme-light');
+  const textColor = isLight ? '#334155' : '#94a3b8';
+  const gridColor = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
+
+  // 1. Gráfico de Materias (Doughnut)
+  let inglesCount = 0;
+  let lenguaCount = 0;
+  let otrasCount = 0;
+  vacantes.forEach(v => {
+    const c = normalize(v.matchedCategory || '');
+    if (c.includes('ingles')) inglesCount++;
+    else if (c.includes('lengua') || c.includes('literatura')) lenguaCount++;
+    else otrasCount++;
+  });
+
+  const ctxMaterias = document.getElementById('chartMaterias');
+  if (ctxMaterias) {
+    if (state.charts.materias) state.charts.materias.destroy();
+    state.charts.materias = new Chart(ctxMaterias, {
+      type: 'doughnut',
+      data: {
+        labels: ['Inglés', 'Lengua y Lit.', 'Otras'],
+        datasets: [{
+          data: [inglesCount, lenguaCount, otrasCount],
+          backgroundColor: ['#8b5cf6', '#10b981', '#f59e0b'],
+          borderColor: isLight ? '#ffffff' : '#111827',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: textColor, boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } }
+          }
+        }
+      }
+    });
+  }
+
+  // 2. Gráfico de Top Localidades (Bar horizontal)
+  const locCounts = {};
+  vacantes.forEach(v => {
+    const loc = v.localidad || 'Santa Rosa';
+    locCounts[loc] = (locCounts[loc] || 0) + 1;
+  });
+  const sortedLocs = Object.entries(locCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+
+  const ctxLoc = document.getElementById('chartLocalidades');
+  if (ctxLoc) {
+    if (state.charts.localidades) state.charts.localidades.destroy();
+    state.charts.localidades = new Chart(ctxLoc, {
+      type: 'bar',
+      data: {
+        labels: sortedLocs.map(l => l[0]),
+        datasets: [{
+          label: 'Vacantes',
+          data: sortedLocs.map(l => l[1]),
+          backgroundColor: '#06b6d4',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: textColor, stepSize: 1 }, grid: { color: gridColor } },
+          y: { ticks: { color: textColor }, grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  // 3. Gráfico de Turnos y Horas
+  const turnoCounts = { 'Mañana': 0, 'Tarde': 0, 'Vespertino/Noche': 0 };
+  vacantes.forEach(v => {
+    const t = (v.turno || '').toUpperCase();
+    if (t === 'M') turnoCounts['Mañana']++;
+    else if (t === 'T') turnoCounts['Tarde']++;
+    else turnoCounts['Vespertino/Noche']++;
+  });
+
+  const ctxTurno = document.getElementById('chartTurnos');
+  if (ctxTurno) {
+    if (state.charts.turnos) state.charts.turnos.destroy();
+    state.charts.turnos = new Chart(ctxTurno, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(turnoCounts),
+        datasets: [{
+          label: 'Vacantes por Turno',
+          data: Object.values(turnoCounts),
+          backgroundColor: ['#6366f1', '#ec4899', '#f59e0b'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: textColor }, grid: { display: false } },
+          y: { ticks: { color: textColor, stepSize: 1 }, grid: { color: gridColor } }
+        }
+      }
+    });
+  }
+}
+
+// ==========================================================================
+// Exportación a Excel (.xlsx) y PDF Imprimible
+// ==========================================================================
+function exportToExcel() {
+  if (typeof window.XLSX === 'undefined') {
+    showToast('Librería de Excel aún cargando...', 'warning');
+    return;
+  }
+
+  if (state.filteredVacantes.length === 0) {
+    showToast('No hay vacantes filtradas para exportar', 'warning');
+    return;
+  }
+
+  const rows = state.filteredVacantes.map(v => ({
+    'Localidad': v.localidad,
+    'Colegio': v.colegio,
+    'Materia': v.materia,
+    'Horas': parseInt(v.horas, 10) || v.horas,
+    'Curso': v.curso,
+    'División': v.division,
+    'Turno': v.turno,
+    'Convocatoria': v.sheetType,
+    'Carácter': v.revista,
+    'Motivo': v.motivo,
+    'Fecha Designación': v.fechaDesignacion || '',
+    'Horarios': v.horarios || '',
+    'CUPOF': v.cupof || '',
+    'Enlace Voz por Vos': v.linkVozPorVos || 'https://vozporvos.lapampa.edu.ar/'
+  }));
+
+  const ws = window.XLSX.utils.json_to_sheet(rows);
+  const wb = window.XLSX.utils.book_new();
+  window.XLSX.utils.book_append_sheet(wb, ws, 'Vacantes');
+
+  const stamp = (typeof dayjs !== 'undefined') ? dayjs().format('YYYY-MM-DD_HHmm') : 'vacantes';
+  window.XLSX.writeFile(wb, `DesignaPampa_Vacantes_${stamp}.xlsx`);
+  showToast('Archivo Excel descargado con éxito', 'success');
+}
+
+function exportToPdf() {
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    showToast('Librería de PDF aún cargando...', 'warning');
+    return;
+  }
+
+  if (state.filteredVacantes.length === 0) {
+    showToast('No hay vacantes filtradas para exportar', 'warning');
+    return;
+  }
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+    // Encabezado
+    doc.setFontSize(16);
+    doc.setTextColor(30, 41, 59);
+    doc.text('DesignaPampa Secundaria · Reporte de Vacantes', 14, 15);
+
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
+    const dateFormatted = (typeof dayjs !== 'undefined') ? dayjs().format('DD/MM/YYYY HH:mm') : new Date().toLocaleString();
+    doc.text(`Generado el: ${dateFormatted} | Total vacantes en reporte: ${state.filteredVacantes.length}`, 14, 21);
+
+    const tableData = state.filteredVacantes.map(v => [
+      v.sheetType === 'Propuestas' ? 'Propuesta' : 'Interinato',
+      v.materia,
+      v.colegio,
+      v.localidad,
+      `${v.horas} hs (${v.curso} "${v.division}")`,
+      v.turno,
+      v.revista,
+      v.horarios || '-'
+    ]);
+
+    doc.autoTable({
+      head: [['Tipo', 'Materia', 'Colegio', 'Localidad', 'Hs / Curso', 'Turno', 'Carácter', 'Horarios']],
+      body: tableData,
+      startY: 26,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [99, 102, 241],
+        textColor: 255,
+        fontSize: 8,
+        fontStyle: 'bold'
+      },
+      styles: {
+        fontSize: 7.5,
+        cellPadding: 2,
+        textColor: [15, 23, 42]
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252]
+      }
+    });
+
+    const stamp = (typeof dayjs !== 'undefined') ? dayjs().format('YYYY-MM-DD_HHmm') : 'reporte';
+    doc.save(`DesignaPampa_Reporte_${stamp}.pdf`);
+    showToast('Reporte PDF descargado con éxito', 'success');
+  } catch (e) {
+    console.error('Error generando PDF:', e);
+    showToast('Error al generar PDF', 'warning');
+  }
 }
 
 window.copyVacancyText = (encoded) => {
@@ -432,6 +868,10 @@ function updateStats() {
   document.getElementById('statOtras').textContent = Math.max(0, otras);
   const badgeDesig = document.getElementById('badgeDesignacionesCount');
   if (badgeDesig) badgeDesig.textContent = total;
+
+  if (state.analyticsOpen) {
+    updateCharts();
+  }
 }
 
 function updateResultsCountUI() {
@@ -451,9 +891,16 @@ function updateLastUpdatedUI() {
   const label = document.getElementById('lastUpdatedLabel');
   if (!label || !state.lastUpdated) return;
 
-  const timeStr = state.lastUpdated.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-  const dateStr = state.lastUpdated.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
-  label.innerHTML = `<i class="fa-regular fa-clock"></i> Última sincronización: <strong>${timeStr} (${dateStr})</strong>`;
+  if (typeof dayjs !== 'undefined') {
+    const d = dayjs(state.lastUpdated);
+    const rel = d.fromNow();
+    const formatted = d.format('HH:mm [hs] (DD/MM)');
+    label.innerHTML = `<i class="fa-regular fa-clock"></i> Sincronizado <strong>${rel}</strong> · <span class="text-xs text-muted">${formatted}</span>`;
+  } else {
+    const timeStr = state.lastUpdated.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    const dateStr = state.lastUpdated.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
+    label.innerHTML = `<i class="fa-regular fa-clock"></i> Última sincronización: <strong>${timeStr} (${dateStr})</strong>`;
+  }
 }
 
 function setScanningState(scanning) {
@@ -1230,6 +1677,79 @@ function setupEventListeners() {
     }
   });
 
+  // Conmutador de Modo de Vista (Tarjetas vs Tabla)
+  const btnCards = document.getElementById('btnViewCards');
+  const btnTable = document.getElementById('btnViewTable');
+  if (btnCards && btnTable) {
+    if (state.viewMode === 'table') {
+      btnCards.classList.remove('active');
+      btnTable.classList.add('active');
+    }
+    btnCards.addEventListener('click', () => {
+      state.viewMode = 'cards';
+      btnCards.classList.add('active');
+      btnTable.classList.remove('active');
+      localStorage.setItem('designapampa_view_mode', 'cards');
+      renderVacancies();
+    });
+    btnTable.addEventListener('click', () => {
+      state.viewMode = 'table';
+      btnTable.classList.add('active');
+      btnCards.classList.remove('active');
+      localStorage.setItem('designapampa_view_mode', 'table');
+      renderVacancies();
+    });
+  }
+
+  // Ordenamiento interactivo de columnas en la tabla
+  document.querySelectorAll('#vacanciesTable th.th-sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.getAttribute('data-sort');
+      if (state.tableSort.column === col) {
+        state.tableSort.direction = state.tableSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        state.tableSort.column = col;
+        state.tableSort.direction = (col === 'horas') ? 'desc' : 'asc';
+      }
+      renderVacanciesTable();
+      setupTooltips();
+    });
+  });
+
+  // Panel de Analítica Colapsable (Chart.js)
+  const btnToggleAnalytics = document.getElementById('btnToggleAnalytics');
+  const btnCloseAnalytics = document.getElementById('btnCloseAnalytics');
+  const analyticsPanel = document.getElementById('analyticsPanel');
+
+  if (btnToggleAnalytics && analyticsPanel) {
+    btnToggleAnalytics.addEventListener('click', () => {
+      state.analyticsOpen = !state.analyticsOpen;
+      if (state.analyticsOpen) {
+        analyticsPanel.classList.remove('hidden');
+        btnToggleAnalytics.classList.add('active');
+        updateCharts();
+      } else {
+        analyticsPanel.classList.add('hidden');
+        btnToggleAnalytics.classList.remove('active');
+      }
+    });
+  }
+
+  if (btnCloseAnalytics && analyticsPanel) {
+    btnCloseAnalytics.addEventListener('click', () => {
+      state.analyticsOpen = false;
+      analyticsPanel.classList.add('hidden');
+      if (btnToggleAnalytics) btnToggleAnalytics.classList.remove('active');
+    });
+  }
+
+  // Botones de Exportación
+  const btnExcel = document.getElementById('btnExportExcel');
+  if (btnExcel) btnExcel.addEventListener('click', exportToExcel);
+
+  const btnPdf = document.getElementById('btnExportPdf');
+  if (btnPdf) btnPdf.addEventListener('click', exportToPdf);
+
   // Tema Claro / Oscuro Toggle
   const btnTheme = document.getElementById('btnThemeToggle');
   const themeIcon = document.getElementById('themeIcon');
@@ -1248,6 +1768,9 @@ function setupEventListeners() {
       document.body.className = 'theme-dark';
       themeIcon.className = 'fa-solid fa-moon';
       localStorage.setItem('designapampa_theme', 'dark');
+    }
+    if (state.analyticsOpen) {
+      updateCharts();
     }
   });
 

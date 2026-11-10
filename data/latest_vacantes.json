@@ -1,78 +1,30 @@
 {
-  "updatedAt": "2026-11-10T17:31:03.004Z",
-  "total": 22,
+  "updatedAt": "2026-11-10T22:30:39.020Z",
+  "total": 19,
   "vacantes": [
     {
-      "id": "Santa_Rosa_MADRE_TERESA_DE_CALCUTA_EDUCACION_ARTISTICA_ARTES_VISUALES_9178_2º_II_2308-0-CB-2º-II-PROF-EDARAVISUA-M-1/3/2011-PP-3",
+      "id": "Santa_Rosa_SANTA_MARIA_DE_LAS_PAMPAS_EDUCACION_FISICA_9179_4º_I_2390-0-ARTVIS-4º-I-PROF-EDFISICA-T-1/3/2013-PP-3",
       "sede": "Sede Santa Rosa",
       "localidad": "Santa Rosa",
       "sheetId": "1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM",
       "sheetType": "Interinatos y Suplencias",
-      "fechaDesignacion": "10/11/2026",
-      "colegio": "MADRE TERESA DE CALCUTA",
-      "materia": "EDUCACION ARTISTICA ARTES VISUALES 9178",
+      "fechaDesignacion": "11/11/2026",
+      "colegio": "SANTA MARIA DE LAS PAMPAS",
+      "materia": "EDUCACION FISICA 9179",
       "horas": "3",
-      "curso": "2º",
-      "division": "II",
-      "ciclo": "CB",
-      "orientacion": "",
-      "turno": "M",
-      "horarios": "MI: 1050 1210 1215 1255",
-      "motivo": "RENUNCIA",
-      "revista": "INTERINO",
-      "cupof": "2308-0-CB-2º-II-PROF-EDARAVISUA-M-1/3/2011-PP-3",
-      "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
-      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
-      "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:46.897Z"
-    },
-    {
-      "id": "Santa_Rosa_PANGUITRUZ_NGER_Coordinador_de_Ciclo-___2301-0-CB-0-8-_CCIC-NINGUNAM-28/10/2026-PPC",
-      "sede": "Sede Santa Rosa",
-      "localidad": "Santa Rosa",
-      "sheetId": "1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM",
-      "sheetType": "Interinatos y Suplencias",
-      "fechaDesignacion": "10/11/2026",
-      "colegio": "PANGUITRUZ NGER",
-      "materia": "Coordinador de Ciclo-",
-      "horas": "18",
-      "curso": "N/D",
-      "division": "N/D",
-      "ciclo": "CB",
-      "orientacion": "",
-      "turno": "M",
-      "horarios": "LU: 745 - 1300 | MA: 745 - 1300 | MI: 745 - 1300 | JU: 745 - 1300 | VIE: 745 - 1300",
-      "motivo": "RESTRUCTURACION",
-      "revista": "INTERINO",
-      "cupof": "2301-0-CB-0-8- CCIC-NINGUNAM-28/10/2026-PPC",
-      "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
-      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
-      "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:46.898Z"
-    },
-    {
-      "id": "Santa_Rosa_JULIO_COLOMBATO_COORDINADOR_DE_CICLO_9183__I_2306-0-CB-0-8-I-CCIC-NINGUNA-T-1/3/2024-PP-C",
-      "sede": "Sede Santa Rosa",
-      "localidad": "Santa Rosa",
-      "sheetId": "1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM",
-      "sheetType": "Interinatos y Suplencias",
-      "fechaDesignacion": "10/11/2026",
-      "colegio": "JULIO COLOMBATO",
-      "materia": "COORDINADOR DE CICLO 9183",
-      "horas": "18",
-      "curso": "N/D",
+      "curso": "4º",
       "division": "I",
-      "ciclo": "CB",
-      "orientacion": "",
+      "ciclo": "CO",
+      "orientacion": "VIS",
       "turno": "T",
-      "horarios": "LU: 1315 1830 | MA: 1315 1830 | MI: 1315 1830 | JU: 1315 1830 | VIE: 1315 1830",
-      "motivo": "RENUNCIA",
-      "revista": "INTERINO",
-      "cupof": "2306-0-CB-0-8-I-CCIC-NINGUNA-T-1/3/2024-PP-C",
+      "horarios": "MA: 1515 1615 | JU: 1515 1615",
+      "motivo": "CONVOCATORIA",
+      "revista": "FUNCIONAL",
+      "cupof": "2390-0-ARTVIS-4º-I-PROF-EDFISICA-T-1/3/2013-PP-3",
       "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:46.898Z"
+      "detectedAt": "2026-11-10T22:30:28.889Z"
     },
     {
       "id": "Uriburu_ELPIDIO_PEREZ_EDUCACION_ARTISTICA_ARTES_VISUALES_9178_2º_I_2397-0-CB-2º-I-PROF-EDARAVISUA-T1/3/2011-PP-3",
@@ -96,7 +48,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1SV4xcEfurMidEvl43CFGeRdxlxNCVTsv9cwiEDvxmEo/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:48.141Z"
+      "detectedAt": "2026-11-10T22:30:30.665Z"
     },
     {
       "id": "Chacharramendi_CHACHARRAMENDI_LENGUA_Y_LITERATURA_9200_3°_Y_4°_I_2338-0-ESR-3ºy4º-I-PROF-LENGLIT-M-1/3/2017-PP-5",
@@ -120,7 +72,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1AjBTcTUjrMAUxOFX_UiPHTXkwfTGxj5XHuFe9jYfcFo/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-10T17:30:48.467Z"
+      "detectedAt": "2026-11-10T22:30:30.643Z"
     },
     {
       "id": "General_Acha_MARIANO_ACHA_ECONOMIA_2460_6º_I_2334-0-INFORM-6º-I-PROF-ECONO-T-1/3/2015-PP-4",
@@ -144,7 +96,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:49.095Z"
+      "detectedAt": "2026-11-10T22:30:32.194Z"
     },
     {
       "id": "General_Acha_ESCUELA_NORMAL_LENGUA_EXTRANJERA_INGLES_9180_1º_II_2403-0-CB-1º-II-PROF-LEEXINGLES-M-1/12/2009-PP-3",
@@ -168,7 +120,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "General_Acha_E.P.E.T._N°4_LENGUA_EXTRANJERA_INGLES_9189_2º_I_2454-0-CBTP-2º-I-PROF-LEEXINGLES-T-1/3/2011-PP-3",
@@ -192,7 +144,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "General_Acha_E.P.E.T._N°4_LENGUA_EXTRANJERA_INGLES_9189_5º_II_2454-0-TEIE-5º-II-PROF-LEEXINGLES-T-29/2/2016-PP-3",
@@ -216,7 +168,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "General_Acha_E.P.E.T._N°4_LENGUA_EXTRANJERA_INGLES_9189_6º_I_2454-0-TEIE-6º-I-PROF-LEEXINGLES-M-1/3/2015-PP-3",
@@ -240,7 +192,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "General_Acha_SUR_PAMPEANO_LENGUA_Y_LITERATURA_9172_1°_I_2393-0-CB-1º-I-PROF-LENGLIT-M-1/12/2009-PP-5",
@@ -264,7 +216,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "General_Acha_VALLE_ARGENTINO_LENGUA_Y_LITERATURA_9432_5º_I_2330-0-CSN-5º-I-PROF-LENGLIT-M-1/3/2014-PP-4",
@@ -288,31 +240,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-10T17:30:49.247Z"
-    },
-    {
-      "id": "Victorica_Escuela_para_Adultos_N°_7_Victorica_Auxiliar_Docente-_0_0_707-0-AD-0-0-ADPR-NINGUNA-V-1/3/2022-PP-C",
-      "sede": "Sede Victorica",
-      "localidad": "Victorica",
-      "sheetId": "1-yfWd_qcv3o_NG81c6Osn26oIs4dqSRluRjUAaKMago",
-      "sheetType": "Interinatos y Suplencias",
-      "fechaDesignacion": "10/11/2026",
-      "colegio": "Escuela para Adultos N° 7 Victorica",
-      "materia": "Auxiliar Docente-",
-      "horas": "N/D",
-      "curso": "0",
-      "division": "0",
-      "ciclo": "",
-      "orientacion": "",
-      "turno": "V",
-      "horarios": "LU: 1830 - 2230 | MA: 1830 - 2230 | MI: 1830 - 2230 | JU: 1830 - 2230 | VIE: 1830 - 2230",
-      "motivo": "RENUNCIA",
-      "revista": "INTERINO",
-      "cupof": "707-0-AD-0-0-ADPR-NINGUNA-V-1/3/2022-PP-C",
-      "linkSheet": "https://docs.google.com/spreadsheets/d/1-yfWd_qcv3o_NG81c6Osn26oIs4dqSRluRjUAaKMago/edit?usp=sharing",
-      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
-      "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:49.994Z"
+      "detectedAt": "2026-11-10T22:30:32.558Z"
     },
     {
       "id": "Telén_Escuela_Provincial_de_Educación_Técnica_Nº_8_Telen_Acompañamiento_a_las_Trayectorias_Escolares_3º_II_2458-0-CB-3º-II-PROF-ACTRAYESCO-M-27/2/2012-PP-3",
@@ -336,7 +264,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1VrU5wBFBoM_L9mh5ZYTgjSJYo5CmCVHyyT2krbOKpWM/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:56.132Z"
+      "detectedAt": "2026-11-10T22:30:34.666Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Hr.Sec.-Integración_de_los_Sistemas_de_Producción_7º_I_2373-0-TPA_Z3-7º-I-PROF-INSISTPRO-T-29/2/2016-PP-5",
@@ -360,7 +288,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:56.366Z"
+      "detectedAt": "2026-11-10T22:30:34.256Z"
     },
     {
       "id": "General_Campos_CRUCERO_GENERAL_BELGRANO_GRAL._CAMPOS_FISICA_2640_5º_I_2386-0-CSN-5º-I-PROF-FIS2-T-1/3/2014-PP-3",
@@ -384,7 +312,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1xvqn9pdVG7J4j23gWwhHQq1-MV3X1za6d6cp1aw9vkI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:57.415Z"
+      "detectedAt": "2026-11-10T22:30:35.985Z"
     },
     {
       "id": "General_Campos_CRUCERO_GENERAL_BELGRANO_GRAL._CAMPOS_MATEMATICA_5º_I_2386-0-CSN-5º-I-PROF-MAT-T-1/3/2014-PP-4",
@@ -408,7 +336,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1xvqn9pdVG7J4j23gWwhHQq1-MV3X1za6d6cp1aw9vkI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:30:57.579Z"
+      "detectedAt": "2026-11-10T22:30:36.327Z"
     },
     {
       "id": "Guatraché_ESCUELA_AGROTECNICA_GUATRACHE_FISICA_5º_I_2408-0-TPA_Z1-5º-I-PROF-FIS-M-1/3/2014-PP-3",
@@ -432,7 +360,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/16pMNrc7N_PbHc_9VKmmHb0fWl-gj-SW-oJiuPurDxJ4/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:31:02.129Z"
+      "detectedAt": "2026-11-10T22:30:37.236Z"
     },
     {
       "id": "Guatraché_ESCUELA_AGROTECNICA_GUATRACHE_MATEMATICA_5º_I_2408-0-TPA_Z1-5º-I-PROF-MAT-M-1/3/2014-PP-3",
@@ -456,7 +384,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/16pMNrc7N_PbHc_9VKmmHb0fWl-gj-SW-oJiuPurDxJ4/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:31:02.129Z"
+      "detectedAt": "2026-11-10T22:30:37.236Z"
     },
     {
       "id": "Macachín_EPET_N.º_5_MACACHIN_GEOGRAFIA_2º_I_2455-0-CBTP-2º-I-PROF-GEO-M-1/3/2011-PP-3",
@@ -480,7 +408,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:31:02.019Z"
+      "detectedAt": "2026-11-10T22:30:37.381Z"
     },
     {
       "id": "Macachín_EPET_N.º_5_MACACHIN_GEOGRAFIA_4º_I_2455-0-TEIE-4º-I-PROF-GEO-T-1/3/2013-PP-4",
@@ -504,7 +432,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:31:02.019Z"
+      "detectedAt": "2026-11-10T22:30:37.381Z"
     },
     {
       "id": "Macachín_“20_DE_NOVIEMBRE”_MACACHIN_GEOGRAFIA_1º_I_2318-0-CB-1º-I-PROF-GEO-M-1/12/2009-PP-3",
@@ -528,7 +456,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-10T17:31:02.020Z"
+      "detectedAt": "2026-11-10T22:30:37.381Z"
     }
   ]
 }

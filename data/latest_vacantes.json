@@ -1,7 +1,31 @@
 {
-  "updatedAt": "2026-11-11T17:44:01.985Z",
-  "total": 14,
+  "updatedAt": "2026-11-12T00:08:13.106Z",
+  "total": 22,
   "vacantes": [
+    {
+      "id": "Toay_CLARO_EN_EL_MONTE_COORDINADOR_DE_CICLO_9183_1º_2º_3º_I_2328-0-CB-0-8-I-CCIC-NINGUNA-T-29/8/2024-PP-C",
+      "sede": "Sede Santa Rosa",
+      "localidad": "Toay",
+      "sheetId": "13VKT8SfIERnyZohED8gGRDRDS4EjF0VRB_LG6lTznSo",
+      "sheetType": "Interinatos y Suplencias",
+      "fechaDesignacion": "12/11/2026",
+      "colegio": "CLARO EN EL MONTE",
+      "materia": "COORDINADOR DE CICLO 9183",
+      "horas": "18",
+      "curso": "1º 2º 3º",
+      "division": "I",
+      "ciclo": "CB",
+      "orientacion": "",
+      "turno": "T",
+      "horarios": "LU: 1315 1830 | MA: 1315 1830 | MI: 1315 1830 | JU: 1315 1830 | VIE: 1315 1830",
+      "motivo": "RENUNCIA",
+      "revista": "INTERINO",
+      "cupof": "2328-0-CB-0-8-I-CCIC-NINGUNA-T-29/8/2024-PP-C",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/13VKT8SfIERnyZohED8gGRDRDS4EjF0VRB_LG6lTznSo/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:04.976Z"
+    },
     {
       "id": "Santa_Rosa_SANTA_MARIA_DE_LAS_PAMPAS_EDUCACION_FISICA_9179_4º_I_2390-0-ARTVIS-4º-I-PROF-EDFISICA-T-1/3/2013-PP-3",
       "sede": "Sede Santa Rosa",
@@ -24,7 +48,103 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:54.102Z"
+      "detectedAt": "2026-11-12T00:08:04.985Z"
+    },
+    {
+      "id": "Santa_Rosa_MARCELINO_CATRON_TECNOLOGIA_DE_LOS_SISTEMAS_INFORMATICOS_9262_4º_I_2302-0-INFORM-4º-I-PROF-TECSISINF-M-1/3/2013-PP-4",
+      "sede": "Sede Santa Rosa",
+      "localidad": "Santa Rosa",
+      "sheetId": "1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "MARCELINO CATRON",
+      "materia": "TECNOLOGIA DE LOS SISTEMAS INFORMATICOS 9262",
+      "horas": "4",
+      "curso": "4º",
+      "division": "I",
+      "ciclo": "CO",
+      "orientacion": "INF",
+      "turno": "M",
+      "horarios": "LU: 1215 1255 | VIE: 1050 1210 1215 1255",
+      "motivo": "CARPETA MEDICA",
+      "revista": "COMUN DEL 03 AL 30/11",
+      "cupof": "2302-0-INFORM-4º-I-PROF-TECSISINF-M-1/3/2013-PP-4",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:05.159Z"
+    },
+    {
+      "id": "Santa_Rosa_PROVINCIA_DE_LA_PAMPA_LENGUA_Y_LITERATURA_9200_2º_II_2383-0-CB-2º-II-PROF-LENGLIT-M-1/3/2014-PP-5",
+      "sede": "Sede Santa Rosa",
+      "localidad": "Santa Rosa",
+      "sheetId": "1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "PROVINCIA DE LA PAMPA",
+      "materia": "LENGUA Y LITERATURA  9200",
+      "horas": "5",
+      "curso": "2º",
+      "division": "II",
+      "ciclo": "CB",
+      "orientacion": "",
+      "turno": "M",
+      "horarios": "LU: 0745 0905 | MA: 0745 0905 | JU: 1130 1210",
+      "motivo": "CARPETA MEDICA",
+      "revista": "COMUN DEL 05 AL 31/11",
+      "cupof": "2383-0-CB-2º-II-PROF-LENGLIT-M-1/3/2014-PP-5",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": "Lengua y Literatura",
+      "detectedAt": "2026-11-12T00:08:05.159Z"
+    },
+    {
+      "id": "Catriló_MEDANO_CORTADO_LENGUA_Y_LITERATURA_9432_4°_I_2332-0-AGRO-4º-I-PROF-LENGLIT-T-1/3/2013-PP-4",
+      "sede": "Sede Santa Rosa",
+      "localidad": "Catriló",
+      "sheetId": "1YdwAkuWG40kd8gf46aJ0s16wsUGeJm1F-_yL9Aq6OxA",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "MEDANO CORTADO",
+      "materia": "LENGUA Y LITERATURA 9432",
+      "horas": "4",
+      "curso": "4°",
+      "division": "I",
+      "ciclo": "CO",
+      "orientacion": "AG",
+      "turno": "T",
+      "horarios": "LU: 1740 1820 | MA: 1315 1435 | JU: 1740 1820",
+      "motivo": "CARPETA MEDICA",
+      "revista": "COMUN AL 19/11",
+      "cupof": "2332-0-AGRO-4º-I-PROF-LENGLIT-T-1/3/2013-PP-4",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1YdwAkuWG40kd8gf46aJ0s16wsUGeJm1F-_yL9Aq6OxA/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": "Lengua y Literatura",
+      "detectedAt": "2026-11-12T00:08:05.524Z"
+    },
+    {
+      "id": "Catriló_MEDANO_CORTADO_MATEMATICA_9201_3°_I_2332-0-CB-3º-I-PROF-MAT-T-27/2/2012-PP-5",
+      "sede": "Sede Santa Rosa",
+      "localidad": "Catriló",
+      "sheetId": "1YdwAkuWG40kd8gf46aJ0s16wsUGeJm1F-_yL9Aq6OxA",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "MEDANO CORTADO",
+      "materia": "MATEMATICA 9201",
+      "horas": "5",
+      "curso": "3°",
+      "division": "I",
+      "ciclo": "CB",
+      "orientacion": "",
+      "turno": "T",
+      "horarios": "MA: 1525 1605 | MI: 1525 1605 1615 1655 | JU: 1525 1605 1615 1655",
+      "motivo": "CARPETA MEDICA",
+      "revista": "COMUN AL 19/11",
+      "cupof": "2332-0-CB-3º-I-PROF-MAT-T-27/2/2012-PP-5",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1YdwAkuWG40kd8gf46aJ0s16wsUGeJm1F-_yL9Aq6OxA/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:05.525Z"
     },
     {
       "id": "Chacharramendi_CHACHARRAMENDI_LENGUA_Y_LITERATURA_9200_3°_Y_4°_I_2338-0-ESR-3ºy4º-I-PROF-LENGLIT-M-1/3/2017-PP-5",
@@ -48,7 +168,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1AjBTcTUjrMAUxOFX_UiPHTXkwfTGxj5XHuFe9jYfcFo/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:56.063Z"
+      "detectedAt": "2026-11-12T00:08:06.389Z"
     },
     {
       "id": "General_Acha_VALLE_ARGENTINO_LENGUA_Y_LITERATURA_9432_5º_I_2330-0-CSN-5º-I-PROF-LENGLIT-M-1/3/2014-PP-4",
@@ -72,7 +192,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:57.014Z"
+      "detectedAt": "2026-11-12T00:08:07.307Z"
     },
     {
       "id": "General_Acha_MARIANO_ACHA_LENGUA_Y_LITERATURA_9200_2º_I_2334-0-CB-2º-I-PROF-LENGLIT-T-1/3/2011-PP-5",
@@ -96,7 +216,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:57.014Z"
+      "detectedAt": "2026-11-12T00:08:07.307Z"
     },
     {
       "id": "Doblas_DOBLAS_JOSE_MANUEL_ESTRADA_MATEMATICA_9434_4º_I_2515-0-ECADM-4º-I-PROF-MAT-T-1/7/2024-PP-4",
@@ -120,7 +240,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1fBg5C8bJzhZB3UdgFa3Vd78iBUmQgOcI7WnjukyigVs/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:57.350Z"
+      "detectedAt": "2026-11-12T00:08:07.473Z"
     },
     {
       "id": "Doblas_DOBLAS_JOSE_MANUEL_ESTRADA_MATEMATICA_9434_5º_I_2515-0-ECADM-5º-I-PROF-MAT-T-1/7/2024-PP-4",
@@ -144,7 +264,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1fBg5C8bJzhZB3UdgFa3Vd78iBUmQgOcI7WnjukyigVs/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:57.350Z"
+      "detectedAt": "2026-11-12T00:08:07.473Z"
     },
     {
       "id": "Doblas_DOBLAS_JOSE_MANUEL_ESTRADA_MATEMATICA_9434_6º_I_2515-0-ECADM-6º-I-PROF-MAT-T-1/7/2024-PP-3",
@@ -168,7 +288,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1fBg5C8bJzhZB3UdgFa3Vd78iBUmQgOcI7WnjukyigVs/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:57.350Z"
+      "detectedAt": "2026-11-12T00:08:07.473Z"
     },
     {
       "id": "Doblas_DOBLAS_JOSE_MANUEL_ESTRADA_QUIMICA_3065_5º_I_2515-0-ECADM-5º-I-PROF-QUIM-T-1/7/2024-PP-4",
@@ -192,7 +312,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1fBg5C8bJzhZB3UdgFa3Vd78iBUmQgOcI7WnjukyigVs/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:57.350Z"
+      "detectedAt": "2026-11-12T00:08:07.473Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Hr.Sec.-Lengua_y_Literatura_2º_I_2373-0-CB-2º-I-PROF-LENGLIT-T-1/3/2011-PP-5",
@@ -216,7 +336,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:58.931Z"
+      "detectedAt": "2026-11-12T00:08:08.848Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Hr.Sec.-Lengua_y_Literatura_5º_I_2373-0-CSN-5º-I-PROF-LENGLIT-M-1/3/2014-PP-4",
@@ -240,7 +360,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:58.931Z"
+      "detectedAt": "2026-11-12T00:08:08.848Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Hr.Sec.-Lengua_y_Literatura_2º_III_2373-0-CBTP-2º-III-PROF-LENGLIT-M-2/3/2026-PP-5",
@@ -264,7 +384,79 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Lengua y Literatura",
-      "detectedAt": "2026-11-11T17:43:58.931Z"
+      "detectedAt": "2026-11-12T00:08:08.848Z"
+    },
+    {
+      "id": "Jacinto_Aráuz_EPET_N.º_9_“JOSEFA_MIGUEL_DE_TUBIO”_J._ARAUZ_LABORATORIO_MEDICIONES_Y_ENSAYOS_ELECTRICOS_6º_I_2462-0-TEIE-6º-I-PROF-LAMEENELEC-M-1/3/2015-PP-4",
+      "sede": "Sede Jacinto Aráuz",
+      "localidad": "Jacinto Aráuz",
+      "sheetId": "1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "EPET N.º 9 “JOSEFA MIGUEL DE TUBIO” J. ARAUZ",
+      "materia": "LABORATORIO MEDICIONES Y ENSAYOS ELECTRICOS",
+      "horas": "4",
+      "curso": "6º",
+      "division": "I",
+      "ciclo": "CO",
+      "orientacion": "TEIE",
+      "turno": "M",
+      "horarios": "MI: 0800 0920 | JU: 0800 0920",
+      "motivo": "RAZON PARTICULAR",
+      "revista": "COMUN 11/11 HASTA 19/11",
+      "cupof": "2462-0-TEIE-6º-I-PROF-LAMEENELEC-M-1/3/2015-PP-4",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:10.295Z"
+    },
+    {
+      "id": "Jacinto_Aráuz_EPET_N.º_9_“JOSEFA_MIGUEL_DE_TUBIO”_J._ARAUZ_TALLER_DE_INSTALACIONES_ELECTRICAS_6º_I_2462-0-TEIE-6º-I-PROF-TAINSTELEC-M-1/3/2015-PP-4",
+      "sede": "Sede Jacinto Aráuz",
+      "localidad": "Jacinto Aráuz",
+      "sheetId": "1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "EPET N.º 9 “JOSEFA MIGUEL DE TUBIO” J. ARAUZ",
+      "materia": "TALLER DE INSTALACIONES ELECTRICAS",
+      "horas": "4",
+      "curso": "6º",
+      "division": "I",
+      "ciclo": "CO",
+      "orientacion": "TEIE",
+      "turno": "M",
+      "horarios": "LU: 1010 1050 1100 1140 | JU: 0930 1050",
+      "motivo": "RAZON PARTICULAR",
+      "revista": "COMUN 11/11 HASTA 19/11",
+      "cupof": "2462-0-TEIE-6º-I-PROF-TAINSTELEC-M-1/3/2015-PP-4",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:10.295Z"
+    },
+    {
+      "id": "Jacinto_Aráuz_EPET_N.º_9_“JOSEFA_MIGUEL_DE_TUBIO”_J._ARAUZ_TALLER_DE_INSTALACIONES_ELECTRICAS_7º_I_2462-0-TEIE-7º-I-PROF-TAINSTELEC-T-29/2/2016-PP-4",
+      "sede": "Sede Jacinto Aráuz",
+      "localidad": "Jacinto Aráuz",
+      "sheetId": "1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U",
+      "sheetType": "Propuestas",
+      "fechaDesignacion": "Publicada recientemente",
+      "colegio": "EPET N.º 9 “JOSEFA MIGUEL DE TUBIO” J. ARAUZ",
+      "materia": "TALLER DE INSTALACIONES ELECTRICAS",
+      "horas": "4",
+      "curso": "7º",
+      "division": "I",
+      "ciclo": "CO",
+      "orientacion": "TEIE",
+      "turno": "T",
+      "horarios": "LU: 1650 1730 1735 1815 | JU: 1610 1730",
+      "motivo": "RAZON PARTICULAR",
+      "revista": "COMUN 11/11 HASTA 19/11",
+      "cupof": "2462-0-TEIE-7º-I-PROF-TAINSTELEC-T-29/2/2016-PP-4",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1EaX7JAV2H--AEP1xOsysiLtJZQCaGWjjcojIICBSJ8U/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-12T00:08:10.295Z"
     },
     {
       "id": "General_Campos_CRUCERO_GENERAL_BELGRANO_GRAL._CAMPOS_MATEMATICA_5º_I_2386-0-CSN-5º-I-PROF-MAT-T-1/3/2014-PP-4",
@@ -288,7 +480,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1xvqn9pdVG7J4j23gWwhHQq1-MV3X1za6d6cp1aw9vkI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:43:59.948Z"
+      "detectedAt": "2026-11-12T00:08:10.063Z"
     },
     {
       "id": "Guatraché_ESCUELA_AGROTECNICA_GUATRACHE_FISICA_5º_I_2408-0-TPA_Z1-5º-I-PROF-FIS-M-1/3/2014-PP-3",
@@ -312,7 +504,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/16pMNrc7N_PbHc_9VKmmHb0fWl-gj-SW-oJiuPurDxJ4/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:44:00.723Z"
+      "detectedAt": "2026-11-12T00:08:10.657Z"
     },
     {
       "id": "Guatraché_ESCUELA_AGROTECNICA_GUATRACHE_MATEMATICA_5º_I_2408-0-TPA_Z1-5º-I-PROF-MAT-M-1/3/2014-PP-3",
@@ -336,7 +528,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/16pMNrc7N_PbHc_9VKmmHb0fWl-gj-SW-oJiuPurDxJ4/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-11T17:44:00.723Z"
+      "detectedAt": "2026-11-12T00:08:10.657Z"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-17T18:57:59.664Z",
-  "total": 9,
+  "updatedAt": "2026-11-18T01:34:02.073Z",
+  "total": 10,
   "vacantes": [
     {
       "id": "General_Acha_ESCUELA_NORMAL_EDUCACION_FISICA_9179_5°_II_2403-0-CSOC-5º-II-PROF-EDFISICA-T-1/3/2014-PP-3",
@@ -24,7 +24,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.424Z"
+      "detectedAt": "2026-11-18T01:33:56.473Z"
     },
     {
       "id": "General_Acha_ESCUELA_NORMAL_EDUCACION_FISICA_9179_5°_I_2403-0-CSOC-5º-I-PROF-EDFISICA-T-1/3/2014-PP-3",
@@ -48,7 +48,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.424Z"
+      "detectedAt": "2026-11-18T01:33:56.474Z"
     },
     {
       "id": "General_Acha_E.P.E.T._N°4_QUIMICA_FISICA_9202_3º_I_2454-0-CBTP-3º-I-PROF-QUIMFISC-T-27/2/2012-PP-3",
@@ -72,7 +72,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.757Z"
+      "detectedAt": "2026-11-18T01:33:56.663Z"
     },
     {
       "id": "General_Acha_MARIANO_ACHA_QUIMICA_FISICA_9202_2º_I_2334-0-CB-2º-I-PROF-QUIMFISC-M-1/3/2011-PP-3",
@@ -96,7 +96,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.757Z"
+      "detectedAt": "2026-11-18T01:33:56.663Z"
     },
     {
       "id": "General_Acha_VALLE_ARGENTINO_QUIMICA_FISICA_9202_2º_I_2330-0-CB-2º-I-PROF-QUIMFISC-T-1/3/2011-PP-3",
@@ -120,7 +120,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.757Z"
+      "detectedAt": "2026-11-18T01:33:56.663Z"
     },
     {
       "id": "General_Acha_VALLE_ARGENTINO_QUIMICA_FISICA_9202_3º_I_2330-0-CB-3º-I-PROF-QUIMFISC-T-27/2/2012-PP-3",
@@ -144,7 +144,31 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-17T18:57:54.757Z"
+      "detectedAt": "2026-11-18T01:33:56.663Z"
+    },
+    {
+      "id": "Telén_Escuela_Provincial_de_Educación_Técnica_Nº_8_Telen_Auxiliar_Docente_Jornada_Extendida-_0_7_2458-0-CO-0-7-ADJE-NINGUNA-M-19/4/2023-PP-C",
+      "sede": "Sede Victorica",
+      "localidad": "Telén",
+      "sheetId": "1VrU5wBFBoM_L9mh5ZYTgjSJYo5CmCVHyyT2krbOKpWM",
+      "sheetType": "Interinatos y Suplencias",
+      "fechaDesignacion": "18/11/2026",
+      "colegio": "Escuela Provincial de Educación Técnica Nº 8 Telen",
+      "materia": "Auxiliar Docente Jornada Extendida-",
+      "horas": "18",
+      "curso": "0",
+      "division": "7",
+      "ciclo": "",
+      "orientacion": "",
+      "turno": "M",
+      "horarios": "LU: 800 - 1315 | MA: 800 - 1315 | MI: 800 - 1315 | JU: 800 - 1315 | VIE: 800 - 1315",
+      "motivo": "RENUNCIA",
+      "revista": "INTERINO",
+      "cupof": "2458-0-CO-0-7-ADJE-NINGUNA-M-19/4/2023-PP-C",
+      "linkSheet": "https://docs.google.com/spreadsheets/d/1VrU5wBFBoM_L9mh5ZYTgjSJYo5CmCVHyyT2krbOKpWM/edit?usp=sharing",
+      "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
+      "matchedCategory": null,
+      "detectedAt": "2026-11-18T01:33:58.717Z"
     },
     {
       "id": "Macachín_“20_DE_NOVIEMBRE”_MACACHIN_LENGUA_EXTRANJERA:_INGLES_4º_I_2318-0-ECADM-4º-I-PROF-LEEXINGLES-T-1/3/2018-PP-3",
@@ -168,7 +192,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-17T18:57:58.660Z"
+      "detectedAt": "2026-11-18T01:34:00.859Z"
     },
     {
       "id": "Macachín_“20_DE_NOVIEMBRE”_MACACHIN_LENGUA_EXTRANJERA:_INGLES_5º_I_2318-0-ECADM-5º-I-PROF-LEEXINGLES-T-1/3/2019-PP-3",
@@ -192,7 +216,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-17T18:57:58.660Z"
+      "detectedAt": "2026-11-18T01:34:00.859Z"
     },
     {
       "id": "Macachín_“20_DE_NOVIEMBRE”_MACACHIN_LENGUA_EXTRANJERA:_INGLES_3º_I_2318-0-CB-3º-I-PROF-LEEXINGLES-T-27/2/2012-PP-3",
@@ -216,7 +240,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1R6PxiCnjDcgZrNoSG15jDp0PkQ4YECYJ7k8AkjsdpYU/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": "Inglés",
-      "detectedAt": "2026-11-17T18:57:58.660Z"
+      "detectedAt": "2026-11-18T01:34:00.859Z"
     }
   ]
 }

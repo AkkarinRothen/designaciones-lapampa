@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T19:25:58.609Z",
+  "updatedAt": "2026-11-27T02:23:53.597Z",
   "total": 5,
   "vacantes": [
     {
@@ -24,7 +24,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1SVcKTlPHT0i4mwdCCpyLq1FnM8QLvOn_22FCmAg7jsM/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-26T19:25:49.308Z"
+      "detectedAt": "2026-11-27T02:23:46.226Z"
     },
     {
       "id": "General_Acha_ESCUELA_NORMAL_QUIMICA_FISICA_9202_2º_I_2403-0-CB-2º-I-PROF-QUIMFISC-T-1/3/2011-PP-3",
@@ -48,7 +48,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-26T19:25:51.609Z"
+      "detectedAt": "2026-11-27T02:23:48.173Z"
     },
     {
       "id": "General_Acha_VALLE_ARGENTINO_MATEMATICA_9173_1º_I_2330-0-CB-1º-I-PROF-MAT-T-1/12/2009-PP-5",
@@ -72,7 +72,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1G-J7cbDCr8bbBOYdkt4Kwmg44tXUb5Ydg7d7kQar2LI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-26T19:25:51.822Z"
+      "detectedAt": "2026-11-27T02:23:48.447Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Auxiliar_Docente_Jornada_Extendida-_0__2373-0-CO-0-9-ADJE-NINGUNA-T-2/3/2026-PP-C",
@@ -96,7 +96,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-26T19:25:55.508Z"
+      "detectedAt": "2026-11-27T02:23:50.188Z"
     },
     {
       "id": "25_de_Mayo_CENTRO_EDUCATIVO_POLIVALENTE_Auxiliar_Docente_Jornada_Extendida-_0_4-4_2373-0-CBTP-0-4-4-ADJE-NINGUNA-M-27/3/2018-PP-C",
@@ -120,7 +120,7 @@
       "linkSheet": "https://docs.google.com/spreadsheets/d/1WHbJD5MRYGhdqUIpy84wsknGzCQ2g9Si77mPeAstXuI/edit?usp=sharing",
       "linkVozPorVos": "https://vozporvos.lapampa.edu.ar/",
       "matchedCategory": null,
-      "detectedAt": "2026-11-26T19:25:55.509Z"
+      "detectedAt": "2026-11-27T02:23:50.188Z"
     }
   ]
 }
